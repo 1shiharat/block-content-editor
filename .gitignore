@@ -9,7 +9,7 @@ sitemap.xml.gz
 
 node_modules/
 assets/components/sir-trevor-js/*
-!build/*
+!assets/components/sir-trevor-js/build/
 assets/components/sir-trevor-columns-block/
 assets/components/jquery/
 assets/components/Eventable/
