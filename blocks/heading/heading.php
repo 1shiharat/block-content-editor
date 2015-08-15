@@ -67,10 +67,13 @@ class BCE_Heading extends BCE_Block{
     public function init(){
         $this->type = 'heading';
         $this->class = 'heading';
-        $this->param = array( 'text' );
+        $this->param = array( 'text','element' );
+        $this->admin_javascript = array(
+            plugin_dir_url( __FILE__ ) . 'heading.js'
+        );
         $this->template = '
         <div class="block-editor__heading">
-            <h1>%text%</h1>
+            <%element%>%text%</%element%>
         </div>
         ';
     }

@@ -16,16 +16,22 @@
             self.prototype.eventEditorSave();
             self.prototype.eventEditorTabs();
             self.prototype.editorTabs();
+            self.prototype.addFrontEditButton();
         };
 
         self.prototype = {
+
+            addFrontEditButton: function(){
+                var url = $('#view-post-btn a').attr('href');
+                var btn = $('<a>').attr('href', url + '?blockcontenteditor=true').text('記事画面で編集').addClass('button').fadeIn('100').css({display: "inline-block"});
+                $('#wp-content-media-buttons').append(btn);
+            },
+
             editorTabs : function(){
                 self.tabsButton = $('#content-html').clone();
                 self.tabsButton = self.tabsButton.attr('id', 'content-block').removeClass('switch-html').addClass('switch-block').text('ブロック');
                 self.tabsButton.removeAttr('onclick');
                 self.tabsButton.appendTo('.wp-editor-tabs');
-
-
                 if ( window.localStorage && localStorage.contentBlock === "1" ){
 
                     $('#content-block').click();

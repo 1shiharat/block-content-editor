@@ -2,3 +2,17 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+.st-media--render{
+    display: none;
+}
+
+.exit_image .st-media--render{
+    display: block;
+    width: 100%;
+    text-align: center;
+
+}
+.exit_image .st-media--uploader__input{
+    display: none;
+}
+

@@ -7,6 +7,9 @@
 (function ($) {
 
     function bce_tinymce_init(){
+        if ( $('#').length > 0 ){
+            $('#wp-front_editor_init-wrap').remove();
+        }
         if ( typeof tinyMCEPreInit.mceInit.content !== "undefined" ) {
             var settings = _.clone(tinyMCEPreInit.mceInit.content);
         } else {
@@ -14,13 +17,32 @@
         }
         settings.selector = ".st-tinymce-block";
         settings.height = "500";
-        settings.plugins = "paste,wordpress,media,fullscreen,wpeditimage,wpgallery,wpview,wplink,hr,tabfocus,textcolor,wpautoresize";
+        settings.plugins = "paste,wordpress,media,fullscreen,wpeditimage,wpgallery,wpview,wplink,hr,tabfocus,textcolor,wpautoresize,codemirror,wpemoji";
         settings.theme_advanced_toolbar_location = "top";
         settings.theme_advanced_styles = "Header 1=h1;Header 2=header2;Header 3=header3;",
-        settings.theme_advanced_buttons1 = "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv,separator,separator",
+        settings.theme_advanced_buttons1 = "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv,separator,separator,code",
         settings.theme_advanced_buttons2 = "formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,|,outdent,indent,|,undo,redo,wp_help";
         settings.menubar = true;
+        settings.wpautop = true;
         settings.language = "ja";
+        settings.remove_linebreaks =  false;
+        settings.force_br_newlines =  true;
+        settings.force_p_newlines =  false;
+        settings.forced_root_block =  '';
+        settings.codemirror = {
+            indentOnInit: true, // Whether or not to indent code on init.
+            path: "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.5.0/", // Path to CodeMirror distribution
+            config: {           // CodeMirror config object
+                mode: 'application/x-httpd-php',
+                lineNumbers: false
+            },
+            jsFiles: [          // Additional JS files to load
+                'mode/clike/clike.js',
+                'mode/php/php.js'
+            ]
+        };
+
+
         settings.wp_autoresize_on = false;
 
         tinyMCE.init(settings);
@@ -29,6 +51,7 @@
     SirTrevor.Blocks.Tinymce = (function () {
 
         return SirTrevor.Block.extend({
+
 
             // String; Names the block
             // Note – please use underscores when naming
@@ -74,12 +97,56 @@
             // String or Function; The HTML for the inner portion of the editor block
             // In this example, the editorHTML is an editable input div (like we use for a TextBlock)
 
+            scribeOptions: {
+                allowBlockElements: true,
+                tags: {
+                    p: true,
+                    img: true,
+                    a: true,
+                    i: true,
+                    span: true,
+                    iframe: true,
+                    h1: true,
+                    h2: true,
+                    h3: true,
+                    h4: true,
+                    h5: true,
+                    h6: true,
+                    div: true,
+                    section: true,
+                    aside: true,
+                    hr: true,
+                    code: true,
+                    pre: true,
+                    font: true,
+                    article: true,
+                    nav: true,
+                    ul: true,
+                    li: true,
+                    ol: true,
+                    dl: true,
+                    dt: true,
+                    dd: true,
+                    table: true,
+                    figure: true,
+                    caption: true,
+                    table: true,
+                    tbody: true,
+                    thead: true,
+                    tr: true,
+                    td: true,
+                    th: true,
+                    colspan: true,
+                    colgroup: true,
+                    tfoot: true,
+                }
+            },
             // Classes:
             // st-required   – indicates this input must be present to pass validation
             // st-text-block – gives the block the ability to use the formatting controls
 
             editorHTML: function () {
-                return "<div class='st-text-block st-tinymce-block' contenteditable='true'></div>";
+                return "<div class='st-text-block st-tinymce-block' contenteditable='false'></div>";
             },
 
             // Function; Executed on render of the block if some data is provided.
@@ -96,7 +163,7 @@
             toData: function () {
                 var dataObj = {};
 
-                var content = this.getTextBlock().html();
+                var content = this.blockStorage.data.text;
                 if (content.length > 0) {
                     dataObj.text = content;
                 }
@@ -150,6 +217,9 @@
             // Function; Any extra HTML parsing can be defined in here.
             // Returns; String (Required)
             toHTML: function (html) {
+                return html;
+            },
+            setTextBlockHTML: function(html) {
                 return html;
             }
         });

@@ -77,6 +77,8 @@ class BCE_Tinymce extends BCE_Block{
             plugin_dir_url(__FILE__) . 'code.min.js',
         );
 
+
+
         $this->public_css = array(
             plugin_dir_url(__FILE__) . 'front-tinymce.css',
         );

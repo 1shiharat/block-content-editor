@@ -68,14 +68,16 @@ class BCE_Wpimage extends BCE_Block
 
     public function init()
     {
-
+        add_action('init',function(){
+            wp_enqueue_media();
+        });
         $this->type = 'wpimage';
         $this->class = 'wpimage';
         $this->param = array('url');
         $this->admin_javascript = array( plugin_dir_url(__FILE__) . 'wpimage.js');
         $this->template = '
-        <div class="block-editor__heading">
-            <h1>%url%</h1>
+        <div class="block-editor__image">
+            <img src="%url%" alt=""/>
         </div>
         ';
 

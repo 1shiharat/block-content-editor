@@ -42,7 +42,7 @@ class Block_Content_Editor_Setup
         $this->version = $version;
 
         add_filter('the_editor', array($this, 'the_editor'), 10, 1);
-        add_action('save_post', array($this, 'block_content_update'), 10, 1);
+
 
     }
 
@@ -66,7 +66,7 @@ class Block_Content_Editor_Setup
     public function enqueue_scripts($hook)
     {
 
-        if ($hook === 'post-new.php' || $hook === 'post.php' ) {
+        if ($hook === 'post-new.php' || $hook === 'post.php') {
             wp_enqueue_script($this->plugin_name . 'sir-trevor-js', plugin_dir_url(__FILE__) . '../assets/components/sir-trevor-js/build/sir-trevor.js', array('jquery', 'underscore'), $this->version, false);
             wp_enqueue_script($this->plugin_name . 'sir-trevor-js-ja', plugin_dir_url(__FILE__) . '../assets/components/sir-trevor-js/locales/ja.js', array('jquery'), $this->version, false);
             wp_enqueue_script($this->plugin_name . 'sir-trevor-js-eventable', plugin_dir_url(__FILE__) . '../assets/components/Eventable/eventable.js', array('jquery'), $this->version, false);
@@ -81,7 +81,8 @@ class Block_Content_Editor_Setup
      */
     public function front_enqueue_styles()
     {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . '../assets/css/block-content-editor-admin.css', array(), $this->version, 'all');
+
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . '../assets/css/block-content-editor-front.css', array(), $this->version, 'all');
         wp_enqueue_style($this->plugin_name . 'sir-trevor-css', plugin_dir_url(__FILE__) . '../assets/components/sir-trevor-js/build/sir-trevor.css', array(), $this->version, false);
         wp_enqueue_style($this->plugin_name . 'sir-trevor-css-icons', plugin_dir_url(__FILE__) . '../assets/components/sir-trevor-js/sir-trevor-icons.css', array(), $this->version, false);
     }
@@ -103,7 +104,6 @@ class Block_Content_Editor_Setup
     }
 
 
-
     /**
      * 投稿エディタにブロックコンテンツエディタ用のマークアップを追加
      * @param $content
@@ -117,17 +117,6 @@ class Block_Content_Editor_Setup
     }
 
 
-    /**
-     * 記事を保存するタイミングで、カスタムフィールドとしてブロックエディタのコンテンツを保存する
-     * @param $post_id
-     */
-    public function block_content_update($post_id)
-    {
-        remove_action('save_post', array($this, 'block_content_update'));
-        $block_content = isset($_REQUEST['block_content']) ? $_REQUEST['block_content'] : '';
-        update_post_meta($post_id, 'block_content', $block_content);
-        add_action('save_post', array($this, 'block_content_update'));
-    }
 
 
 

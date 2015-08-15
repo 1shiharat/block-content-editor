@@ -3,7 +3,7 @@
   font-size: 16px; }
 
 #block-content-editor-container {
-  padding: 1em; }
+  padding: 2em; }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before, [data-icon-after]:after {
@@ -88,6 +88,15 @@
   list-style-type: disc;
   list-style-position: inside; }
 
+.st-block--heading-type {
+  visibility: hidden;
+  opacity: 0;
+  transition: all ease .2s; }
+
+.st-block__inner:hover .st-block--heading-type {
+  visibility: visible;
+  opacity: 1; }
+
 .st-errors {
   background-color: #ffe1e4;
   padding: 2em;
@@ -107,7 +116,7 @@
   from {
     opacity: 0;
     -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0); }
+    transform: translate3d(0, 100%, 0) scale3d(0, 0, 0); }
 
   100% {
     opacity: 1;
@@ -118,7 +127,7 @@
   from {
     opacity: 0;
     -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0); }
+    transform: translate3d(0, 100%, 0) scale3d(0, 0, 0); }
 
   100% {
     opacity: 1;
@@ -135,7 +144,15 @@
   font-size: 1.875em;
   padding: 0.3em 0;
   line-height: 0.9;
-  border-radius: 0.2em; }
+  border-radius: 0.2em;
+  width: 50px;
+  display: block;
+  height: 28px;
+  background-color: #fff;
+  border: 1px solid #e9e9e9;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer; }
 
 .st-block-controls__top:hover:before {
   color: #34E0C2;
@@ -184,13 +201,17 @@
   position: relative; }
 
 .st-block__inner {
-  padding: 1.275em 1.275em 2.8em;
-  border: 2px solid #fff;
+  padding: 0 0 0em;
+  outline: 2px solid #fff;
   position: relative;
   transition: all ease .2s; }
 
+div[data-type="Columns"] .st-block__inner {
+  padding: 1.275em 1.275em 2.8em; }
+
 .st-block__inner:hover {
-  border-color: #34E0C2; }
+  outline: 2px solid #34E0C2;
+  outline-offset: 1.275em; }
 
 .st-block--with-errors .st-block__inner, .st-block--delete-active .st-block__inner {
   border-color: #d70014; }
@@ -210,7 +231,14 @@
   font-size: 1.875em;
   padding: 0.3em 0;
   line-height: 0.9;
-  border-radius: 0.2em; }
+  border-radius: 0.2em;
+  width: 50px;
+  display: block;
+  height: 28px;
+  background-color: #fff;
+  border: 1px solid #e9e9e9;
+  margin-left: auto;
+  margin-right: auto; }
 
 .st-block--with-plus:after {
   background: #F3F3F3;
@@ -403,8 +431,8 @@ ul.st-text-block {
 
 .st-block__ui, .st-block__ui-delete-controls {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: -20px;
+  right: -20px;
   opacity: 0; }
 
 .st-block__ui {

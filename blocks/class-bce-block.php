@@ -141,6 +141,9 @@ class BCE_Block
         if ( isset( $this->admin_javascript ) && is_array( $this->admin_javascript ) ){
             foreach( $this->admin_javascript as $i => $js_path ){
                 wp_enqueue_script( $this->type . '_' . $i . '_' . 'js', $js_path, array(), null , true );
+                if ( $this->type == 'tinymce' ){
+                    wp_localize_script(  'tinymce_1_js', 'bce_tinymce_url', array( 'url' =>  plugin_dir_url(__FILE__) . 'tinymce/' )  );
+                }
             }
         }
         if ( isset( $this->admin_css ) && is_array( $this->admin_css ) ){

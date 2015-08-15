@@ -19,12 +19,17 @@ class BCE_Blocks
     public function __construct($plugin_name)
     {
         $this->plugin_name = $plugin_name;
+
+        $this->force_post_content_save = true;
+
         spl_autoload_register(array($this, 'bce_autoloader'));
         $this->set_types();
         $this->set_blocks();
 
         add_filter('the_content', array($this, 'the_content'), 11, 1);
         add_filter('the_content', array($this, 'filter_post_content'), 10, 1);
+        add_action('wp_ajax_front-block-content-editor-save', array($this, 'post_save'));
+        add_action('save_post', array($this, 'block_content_update'), 10, 1);
     }
 
     /**
@@ -91,7 +96,7 @@ class BCE_Blocks
      */
     public function filter_post_content($content)
     {
-        $block_content = $this->get_contents();
+        $block_content = get_post_meta( get_the_ID(), 'block_content_html', true );
 
         if ($block_content) {
             return $block_content;
@@ -145,7 +150,7 @@ class BCE_Blocks
     }
 
     /**
-     * ブロックをオートロードする
+     * ブロッククラスのオートロード
      */
     public function bce_autoloader($class_name)
     {
@@ -160,25 +165,114 @@ class BCE_Blocks
 
     }
 
+    /**
+     * コンテンツをエディタに置換
+     * @param $content
+     * @return string
+     */
     public function the_content($content)
     {
 
-        if (isset($_GET['blockcontenteditor']) && $_GET['blockcontenteditor'] === 'true') {
+        if ($this->check_edit_post()) {
+
             $post_id = get_the_ID();
             $block_content = get_post_meta($post_id, 'block_content', true);
-
-
             require_once WPINC . '/class-wp-editor.php';
-            wp_editor( '', 'front_editor_init', array(
+            wp_editor('', 'content', array(
                 'textarea_rows' => 15,
                 'teeny' => true,
-                'quicktags' => false,
+                'quicktags' => true,
                 'media_buttons' => true,
-            ) );
-            return '<div id="front-block-content-editor-container" style="display: block; background: #fff;"><form><textarea name="block_content" id="front-block-content-editor" style="display: none;">' . $block_content . '</textarea><div class="front-block-content-editor__submit"><button id="front-block-content-editor-submit" type="submit">'. __( 'Save', 'block-content-editor' ) .'</button></div></form></div>';
+            ));
+            $save_text = __('Save', 'block-content-editor');
+            $nonce = wp_create_nonce(__FILE__);
+            $form = <<<FORM
+<div id="front-block-content-editor-container" style="display: block; background: #fff;">
+    <form name="front-block-content-editor-form" id="front-block-content-editor-form" action="?" method="post">
+        <input type="hidden" name="front-block-content-editor-nonce" id="front-block-content-editor-nonce" value="$nonce" />
+        <input type="hidden" name="front-block-content-editor-post_id" id="front-block-content-editor-post_id" value="$post_id" />
+        <textarea name="block_content" id="front-block-content-editor" style="display: none;">$block_content</textarea>
+        <div class="front-block-content-editor__submit">
+            <button id="front-block-content-editor-submit" type="submit">$save_text</button>
+        </div>
+    </form>
+    </div>
+FORM;
+            return $form;
+
+
         }
         return $content;
 
     }
 
+    /**
+     * 編集していい記事がチェック
+     * @return bool
+     */
+    public function check_edit_post()
+    {
+
+        $vaild = true;
+        $this_post_id = get_the_ID();
+
+        if (!isset($_GET['blockcontenteditor']) || $_GET['blockcontenteditor'] !== 'true') {
+            $vaild = false;
+        }
+
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $url = parse_url($_SERVER['HTTP_REFERER']);
+            if (isset($url['query'])) {
+                parse_str($url['query']);
+                $post_id = (isset($post)) ? intval($post) : false;
+            } else {
+                $vaild = false;
+            }
+            if ($post_id !== $this_post_id) {
+                $vaild = false;
+            }
+        } else {
+            $vaild = false;
+        }
+        return $vaild;
+    }
+
+    /**
+     * データを保存
+     */
+    public function post_save()
+    {
+        $success = 0;
+        $data = isset( $_POST['json'] ) ? $_POST['json'] : false;
+        $post_id = isset( $_POST['post_id'] ) ? $_POST['post_id'] : false;
+        $nonce = wp_verify_nonce( $_POST['nonce'], __FILE__ );
+
+        if ( $data && is_numeric( $post_id ) && $nonce ){
+            $success = update_post_meta( $post_id, 'block_content' , $data );
+        }
+
+        echo wp_send_json( array( 'status' => $success ) );
+        exit();
+    }
+
+    /**
+     * 記事を保存するタイミングで、カスタムフィールドとしてブロックエディタのコンテンツを保存する
+     * @param $post_id
+     */
+    public function block_content_update($post_id)
+    {
+        remove_action('save_post', array($this, 'block_content_update'));
+        $block_content = isset($_REQUEST['block_content']) ? $_REQUEST['block_content'] : '';
+        update_post_meta($post_id, 'block_content', $block_content);
+        update_post_meta($post_id, 'block_content_html', $this->get_contents($post_id));
+        if ( $this->force_post_content_save == true ){
+            wp_update_post(array(
+                'ID' => $post_id,
+                'post_content' => $this->get_contents($post_id),
+            ));
+        }
+
+
+        add_action('save_post', array($this, 'block_content_update'));
+    }
 }
