@@ -1,0 +1,23 @@
+{
+  "name": "block-content-editor",
+  "version": "0.0.0",
+  "authors": [
+    "1shiharaT <akeome1369@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "sir-trevor-js": "~0.4.3",
+    "sir-trevor-generator": "*",
+    "sir-trevor-columns-block": "https://github.com/e1himself/sir-trevor-columns-block.git#~0.3.0"
+  },
+  "devDependencies": {
+    "i18n-js": "~2.1.2"
+  }
+}

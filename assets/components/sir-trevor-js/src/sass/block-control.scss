@@ -1,0 +1,89 @@
+// Block Control
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+.st--block-limit-reached .st-block-controls__top {
+  display: none;
+}
+
+.st-block-controls__top:before {
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: 1.875em;
+  padding: 0.3em 0;
+  line-height: 0.9;
+  border-radius: 0.2em;
+}
+
+.st-block-controls__top:hover:before {
+  color: $accent-color;
+  background: $blocks-control-bg-color;
+}
+
+.st-block-controls {
+  background-color: $blocks-control-bg-color;
+  display: none;
+  border-radius: 0.2em;
+  color: $base-ui-color;
+  width: 100%;
+  text-align: center;
+  padding: 1.2em 0;
+}
+
+.st-block-controls--active {
+  display:block;
+  -webkit-animation-duration: .4s;
+  animation-duration: .4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+
+.st-block-control {
+  font-size: 0.8em;
+  display: inline-block;
+  cursor: pointer;
+  margin: 5px;
+  width: 70px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+
+.st-block-control .st-icon {
+  font-size: 2.25em;
+  margin: 0 0 .2em 0;
+  display: block;
+}
+
+.st-block-control:hover {
+  color: $accent-color;
+}
