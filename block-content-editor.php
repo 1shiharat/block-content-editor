@@ -69,4 +69,4 @@ function run_block_content_editor() {
 	$plugin = new Block_Content_Editor();
 	$plugin->run();
 }
-run_block_content_editor();
+add_action('after_setup_theme', 'run_block_content_editor');

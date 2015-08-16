@@ -6,7 +6,7 @@
 
 (function ($) {
 
-    function bce_tinymce_init(){
+    function bce_tinymce_init(selector){
         if ( $('#').length > 0 ){
             $('#wp-front_editor_init-wrap').remove();
         }
@@ -15,7 +15,8 @@
         } else {
             var settings = {};
         }
-        settings.selector = ".st-tinymce-block";
+        console.log(selector);
+        settings.selector = selector;
         settings.height = "500";
         settings.plugins = "paste,wordpress,media,fullscreen,wpeditimage,wpgallery,wpview,wplink,hr,tabfocus,textcolor,wpautoresize,codemirror,wpemoji";
         settings.theme_advanced_toolbar_location = "top";
@@ -146,7 +147,8 @@
             // st-text-block – gives the block the ability to use the formatting controls
 
             editorHTML: function () {
-                return "<div class='st-text-block st-tinymce-block' contenteditable='false'></div>";
+                var template = _.template("<div class='st-text-block st-tinymce-block st-tinymce-block_<%= blockID%>' contenteditable='false'></div>");
+                return template( {blockID: this.blockID} );
             },
 
             // Function; Executed on render of the block if some data is provided.
@@ -193,7 +195,7 @@
             // Useful for initialising extra pieces of UI or binding extra events.
             // In this example we add an extra button, just because.
             onBlockRender: function () {
-                bce_tinymce_init();
+                bce_tinymce_init('.st-tinymce-block_' + this.blockID);
 
             },
 

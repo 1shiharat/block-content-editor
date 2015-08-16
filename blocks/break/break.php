@@ -75,8 +75,8 @@ class BCE_Break extends BCE_Block{
             plugin_dir_url( __FILE__ ) . 'break.js'
         );
         $this->template = '
-        <div class="block-editor__break">
-            <h1>%text%</h1>
+        <div class="bce-block bce-block__break">
+            <hr />
         </div>
         ';
     }

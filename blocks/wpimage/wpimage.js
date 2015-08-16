@@ -7,6 +7,7 @@ SirTrevor.Blocks.Wpimage = (function () {
             '<div class="st-media--uploader__input">' +
                 '<p style="text-align:center;"><button class="st-block st-mediaupload button add-media button-hero">メディアを追加</button></p>' +
                 '<input class="st-url" name="url" type="hidden" value="<%= getImgUrl() %>">' +
+                '<input class="st-alt" name="alt" type="hidden" value="<%= getImgAlt() %>">' +
             '</div>' +
             '<div class="st-media--render">' +
                 '<img src="<%= getImgUrl() %>">' +
@@ -34,6 +35,13 @@ SirTrevor.Blocks.Wpimage = (function () {
                 return '';
             }
         },
+        getImgAlt: function(){
+            if ( typeof this.blockStorage.data.alt !== 'undefined' ) {
+                return this.blockStorage.data.alt;
+            } else {
+                return '';
+            }
+        },
 
         droppable: false,
         uploadable: false,
@@ -50,7 +58,8 @@ SirTrevor.Blocks.Wpimage = (function () {
                 e.preventDefault();
                 var file_frame, thumbnails;
                 var button = $(this);
-                var inputId = button.closest(closestWrap).find('.st-url');
+                var urlInput = button.closest(closestWrap).find('.st-url');
+                var altInput = button.closest(closestWrap).find('.st-alt');
                 var render = button.closest(closestWrap).find('.st-media--render img');
                 if (file_frame) {
                     file_frame.open();
@@ -69,18 +78,21 @@ SirTrevor.Blocks.Wpimage = (function () {
                 file_frame.on('select', function (e) {
 
                     var selected = file_frame.state().get('selection').toJSON(),
-                        store = inputId,
-                        urls = [];
+                        store = urlInput,
+                        altStore = altInput,
+                        urls = [],
+                        alts = [];
                     for (var i = selected.length - 1; i >= 0; i--) {
                         urls.push(selected[i].url);
+                        alts.push(selected[i].alt);
                     }
 
                     store.val(urls).trigger('change');
-                    render.attr('src',urls);
+                    altStore.val(alts).trigger('change');
+                    render.attr('src',urls).attr('alt',alts);
                     button.closest(closestWrap).addClass('exit_image');
-                    //updateThumbnails(urls, store);
+
                 });
-                // open the file frame
                 file_frame.open();
             });
 
@@ -91,7 +103,7 @@ SirTrevor.Blocks.Wpimage = (function () {
                     parent = $(this).closest(closestWrap).find('.st-media--render img'),
                     input = $( button.data( 'store' ) ),
                     store = $(input);
-                parent.attr('src', '');
+                parent.attr('src', '').attr('alt','');
                 $(this).closest(closestWrap).removeClass('exit_image');
                 input.val( '' ).trigger( 'change' );
             } );

@@ -164,6 +164,9 @@ class Block_Content_Editor_Setup
             ),
             // ブロック
             "blocks" => array(
+                "tooltiptitle" => array(
+                  "text" => __( 'ブロック', "block-content-editor" ),
+                ),
                 "text" => array(
                     "title" => __( "テキスト", "block-content-editor" ),
                 ),

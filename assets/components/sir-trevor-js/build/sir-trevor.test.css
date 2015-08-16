@@ -164,15 +164,6 @@
     -webkit-transform: none;
     transform: none; } }
 
-.st-drag-over {
-  -webkit-animation-duration: .4s;
-  animation-duration: .4s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn;
-  animation-iteration-count: infinite; }
-
 .ripple {
   overflow: hidden; }
 
@@ -250,6 +241,12 @@
 .st-block__inner:hover .st-block--heading-type {
   visibility: visible;
   opacity: 1; }
+
+.st-block__inner textarea {
+  width: 100%;
+  border: none;
+  -webkit-appearance: none;
+  box-shadow: none; }
 
 .st-errors {
   background-color: #ffe1e4;
@@ -394,6 +391,20 @@
 .st-block {
   padding: 0;
   position: relative; }
+
+.st-block__inner:hover:before {
+  display: block;
+  position: absolute;
+  top: -2.2em;
+  left: -0.2em;
+  width: 12em;
+  padding: 0.5em 1em 0.5em 1em;
+  background: rgba(23, 83, 103, 0.8);
+  color: #fff;
+  font-size: 80%;
+  line-height: 1.2em;
+  content: attr(title);
+  z-index: -1; }
 
 .st-block__inner {
   padding: 1.275em 1.275em 2.8em;

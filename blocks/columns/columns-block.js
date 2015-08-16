@@ -31,6 +31,8 @@
             'columns-6-6': [6, 6],
             'columns-3-9': [3, 9],
             'columns-9-3': [9, 3],
+            'columns-5-7': [5, 7],
+            'columns-7-5': [7, 5],
             'columns-4-8': [4, 8],
             'columns-8-4': [8, 4],
             'columns-4-4-4': [4, 4, 4],
@@ -53,6 +55,8 @@
                 'columns-3-3-3-3': this.changeColumnsHandler('columns-3-3-3-3'),
                 'columns-3-9': this.changeColumnsHandler('columns-3-9'),
                 'columns-9-3': this.changeColumnsHandler('columns-9-3'),
+                'columns-5-7': this.changeColumnsHandler('columns-5-7'),
+                'columns-7-5': this.changeColumnsHandler('columns-7-5'),
                 'columns-3-6-3': this.changeColumnsHandler('columns-3-6-3')
             };
         },

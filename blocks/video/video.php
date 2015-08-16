@@ -75,12 +75,13 @@ class BCE_Video extends BCE_Block
 
     public function generate_html($data)
     {
-        $html = "";
+        $html = '<div class="bce-block bce-block__video">';
         if ( $data->source == 'youtube' ) {
             $html = '<iframe src="//www.youtube-nocookie.com/embed/' . $data->remote_id . '" frameborder="0" allowfullscreen=""></iframe>';
         } elseif( $data->source == 'vimeo' ) {
             $html = '<iframe src="http://player.vimeo.com/video/' . $data->remote_id . '?title=0&byline=0" frameborder="0" allowfullscreen=""></iframe>';
         }
+        $html .= '</div>';
         return $html;
     }
 }

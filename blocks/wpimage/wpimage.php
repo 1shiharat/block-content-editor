@@ -73,11 +73,11 @@ class BCE_Wpimage extends BCE_Block
         });
         $this->type = 'wpimage';
         $this->class = 'wpimage';
-        $this->param = array('url');
+        $this->param = array('url','alt');
         $this->admin_javascript = array( plugin_dir_url(__FILE__) . 'wpimage.js');
         $this->template = '
-        <div class="block-editor__image">
-            <img src="%url%" alt=""/>
+        <div class="bce-block bce-block__image">
+            <img src="%url%" alt="%alt%"/>
         </div>
         ';
 

@@ -72,7 +72,7 @@ class BCE_Heading extends BCE_Block{
             plugin_dir_url( __FILE__ ) . 'heading.js'
         );
         $this->template = '
-        <div class="block-editor__heading">
+        <div class="bce-block bce-block__heading">
             <%element%>%text%</%element%>
         </div>
         ';

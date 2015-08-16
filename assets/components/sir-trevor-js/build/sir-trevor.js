@@ -15426,11 +15426,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _setBlockInner : function() {
 	    var editor_html = _.result(this, 'editorHTML');
 
+
 	    this.$el.append(
 	      this.block_template({ editor_html: editor_html })
 	    );
 
 	    this.$inner = this.$el.find('.st-block__inner');
+	    var tooltiptitle = this.title() + i18n.t('blocks:tooltiptitle:text');
+	    this.$inner.attr('title', tooltiptitle);
 	    this.$inner.bind('click mouseover', function(e){ e.stopPropagation(); });
 	  },
 

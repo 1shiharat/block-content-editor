@@ -83,11 +83,11 @@ class BCE_Columns extends BCE_Block{
 
     public function generate_html($data, $block_instance){
 
-        $html = '<div class="bce-columns ' . $this->get_row_markup() . '">';
+        $html = '<div class="bce-block bce-block__columns ' . $this->get_row_markup() . '">';
         foreach( $data->columns as $key => $column ){
             $width = $column->width;
             $blocks = $column->blocks;
-            $html .= '<div class="bce-columns__item ' . $this->get_grid_classname( $width ) . '">';
+            $html .= '<div class="bce-block__columns__item ' . $this->get_grid_classname( $width ) . '">';
             foreach( $blocks as $block ) {
                 $html .= $block_instance[$block->type]->generate_html($block->data, $this->blocks);
             }

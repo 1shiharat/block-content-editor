@@ -69,7 +69,7 @@ class BCE_Text extends BCE_Block{
         $this->class = 'text';
         $this->param = array( 'text' );
         $this->template = '
-        <div class="block-editor__text">
+        <div class="bce-block bce-block__text">
             %text%
         </div>
         ';

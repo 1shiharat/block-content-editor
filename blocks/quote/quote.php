@@ -69,7 +69,7 @@ class BCE_Quote extends BCE_Block{
         $this->class = 'quote';
         $this->param = array( 'text' );
         $this->template = '
-        <div class="block-editor__quote">
+        <div class="bce-block bce-block__quote">
             <blockquote>%text%</blockquote>
         </div>
         ';

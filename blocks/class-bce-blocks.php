@@ -30,31 +30,32 @@ class BCE_Blocks
         add_filter('the_content', array($this, 'filter_post_content'), 10, 1);
         add_action('wp_ajax_front-block-content-editor-save', array($this, 'post_save'));
         add_action('save_post', array($this, 'block_content_update'), 10, 1);
-        add_action( 'wp_enqueue_scripts', array( $this, 'output_localize_script' ), 0, 1 );
-        add_action( 'admin_enqueue_scripts', array( $this, 'output_localize_script' ), 0, 1 );
+        add_action('wp_enqueue_scripts', array($this, 'output_localize_script'), 0, 1);
+        add_action('admin_enqueue_scripts', array($this, 'output_localize_script'), 0, 1);
     }
 
 
     /**
      * JavaScript へ値を渡すためのメソッド
      */
-    public function output_localize_script(){
-        $types = array_map(function($t) {
+    public function output_localize_script()
+    {
+        $types = array_map(function ($t) {
             return ucfirst($t);
-        }, $this->get_types() );
+        }, $this->get_types());
 
         $config = array(
             'config' => array(
                 'language' => get_locale(),
                 'debug' => false,
                 'scribeDebug' => false,
-                'uploadUrl' => admin_url( '/media-new.php' ),
+                'uploadUrl' => admin_url('/media-new.php'),
             ),
             'blockTypes' => $types,
         );
 
         $id = $this->plugin_name;
-        wp_localize_script( $id, 'BCEConfig', $config );
+        wp_localize_script($id, 'BCEConfig', $config);
     }
 
     /**
@@ -83,7 +84,6 @@ class BCE_Blocks
          * フィールドを外部から追加できるように
          */
         $this->types = apply_filters('bce_blocks_types', $types);
-
         return $this->types;
     }
 
@@ -183,9 +183,13 @@ class BCE_Blocks
     {
         if (strpos('BCE_', $classname) >= 0) {
             $class_name = str_replace('BCE_', '', $class_name);
-            $classes_dir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR . lcfirst($class_name) . DIRECTORY_SEPARATOR;
+            $themeclassesdir = get_template_directory() . DIRECTORY_SEPARATOR . 'blocks' . DIRECTORY_SEPARATOR . lcfirst($class_name) . DIRECTORY_SEPARATOR;
+            $classbasedir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
+            $classes_dir = $classbasedir . DIRECTORY_SEPARATOR . lcfirst($class_name) . DIRECTORY_SEPARATOR;
             $class_file = str_replace('_', DIRECTORY_SEPARATOR, lcfirst($class_name)) . '.php';
-            if (file_exists($classes_dir . $class_file)) {
+            if ( file_exists( $themeclassesdir . $class_file ) ){
+                require_once $themeclassesdir . $class_file;
+            } else if (file_exists($classes_dir . $class_file)) {
                 require_once $classes_dir . $class_file;
             }
         }
@@ -298,8 +302,7 @@ FORM;
                 'post_content' => $this->get_contents($post_id),
             ));
         }
-
-
         add_action('save_post', array($this, 'block_content_update'));
     }
+
 }
