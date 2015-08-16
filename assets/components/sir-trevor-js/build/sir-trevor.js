@@ -3238,6 +3238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var scribePluginLinkPromptCommand = __webpack_require__(97);
 	var scribePluginSanitizer = __webpack_require__(98);
 
+
 	var sanitizeDefaults = {
 	  p: true,
 	  a: {
@@ -3263,6 +3264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (_.isObject(scribeOptions)) {
 	      scribeConfig = Object.assign(scribeConfig, scribeOptions);
 	    }
+
 
 	    var scribe = new Scribe(el, scribeConfig);
 
@@ -10014,7 +10016,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * https://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#the-insertlinebreak-command
 	       * As per: http://jsbin.com/IQUraXA/1/edit?html,js,output
 	       */
+	      var isComposing = false;
+	      scribe.el.addEventListener('compositionstart', function(event) {
+	        isComposing = true;
+	      });
+	      scribe.el.addEventListener('compositionend', function(event) {
+	        isComposing = false;
+	      });
 	      scribe.el.addEventListener('keydown', function (event) {
+	        if (isComposing) { return false;}
 	        if (event.keyCode === 13) { // enter
 	          var selection = new scribe.api.Selection();
 	          var range = selection.range;
@@ -11023,9 +11033,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	              scribe.transactionManager.run(function () {
 	                // Store the caret position
-	                selection.placeMarkers();
+	                //selection.placeMarkers();
 	                nodeHelpers.removeChromeArtifacts(containerPElement);
-	                selection.selectMarkers();
+	                //selection.selectMarkers();
 	              }, true);
 	            }
 	          }
@@ -16804,6 +16814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ = __webpack_require__(2);
 	var $ = __webpack_require__(10);
+
 
 	var EventBus = __webpack_require__(16);
 
