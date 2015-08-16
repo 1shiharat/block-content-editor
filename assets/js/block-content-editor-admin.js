@@ -4,12 +4,13 @@
     /* global tinymce, tinyMCEPreInit, QTags, setUserSetting */
     var BlockContentEditor = (new function(){
 
+        var config = BCEConfig || {};
         var self = function(){
 
             self.options = {
                 editorTarget: "#block-content-editor",
                 editorTargetContainer : "#block-content-editor-container",
-                editorBlockType: ["Heading", "Text", "Tinymce", "Wpimage", "List", "Video", "Code","Quote", "Columns","Break"],
+                editorBlockType: config.blockTypes,
             }
 
             self.prototype.editorInit();
@@ -92,11 +93,11 @@
 
             // 設定
             editorSetting : function(){
-                SirTrevor.config.language = 'ja';
-                SirTrevor.config.debug = true;
-                SirTrevor.config.scribeDebug = true;
+                SirTrevor.config.language = config.config.language;
+                SirTrevor.config.debug = config.config.debug;
+                SirTrevor.config.scribeDebug = config.config.scribeDebug;
                 SirTrevor.setDefaults({
-                    uploadUrl: '/wp-admin/media-new.php'
+                    uploadUrl: config.config.uploadUrl
                 });
             },
 
@@ -118,7 +119,7 @@
             },
             buttonRippleEffect: function(){
 
-                $('.st-block-control,.st-block-ui-btn').on('click', function (event) {
+                $('.st-block-control').on('click', function (event) {
                     event.preventDefault();
 
                     var $div = $('<div/>'),

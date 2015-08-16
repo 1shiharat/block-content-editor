@@ -30,6 +30,31 @@ class BCE_Blocks
         add_filter('the_content', array($this, 'filter_post_content'), 10, 1);
         add_action('wp_ajax_front-block-content-editor-save', array($this, 'post_save'));
         add_action('save_post', array($this, 'block_content_update'), 10, 1);
+        add_action( 'wp_enqueue_scripts', array( $this, 'output_localize_script' ), 0, 1 );
+        add_action( 'admin_enqueue_scripts', array( $this, 'output_localize_script' ), 0, 1 );
+    }
+
+
+    /**
+     * JavaScript へ値を渡すためのメソッド
+     */
+    public function output_localize_script(){
+        $types = array_map(function($t) {
+            return ucfirst($t);
+        }, $this->get_types() );
+
+        $config = array(
+            'config' => array(
+                'language' => get_locale(),
+                'debug' => false,
+                'scribeDebug' => false,
+                'uploadUrl' => admin_url( '/media-new.php' ),
+            ),
+            'blockTypes' => $types,
+        );
+
+        $id = $this->plugin_name;
+        wp_localize_script( $id, 'BCEConfig', $config );
     }
 
     /**
@@ -71,6 +96,7 @@ class BCE_Blocks
         return $this->types;
     }
 
+
     /**
      * 一つのブロックタイプをセット
      * @param $type
@@ -97,7 +123,7 @@ class BCE_Blocks
      */
     public function filter_post_content($content)
     {
-        $block_content = get_post_meta( get_the_ID(), 'block_content_html', true );
+        $block_content = get_post_meta(get_the_ID(), 'block_content_html', true);
 
         if ($block_content) {
             return $block_content;
@@ -244,15 +270,15 @@ FORM;
     public function post_save()
     {
         $success = 0;
-        $data = isset( $_POST['json'] ) ? $_POST['json'] : false;
-        $post_id = isset( $_POST['post_id'] ) ? $_POST['post_id'] : false;
-        $nonce = wp_verify_nonce( $_POST['nonce'], __FILE__ );
+        $data = isset($_POST['json']) ? $_POST['json'] : false;
+        $post_id = isset($_POST['post_id']) ? $_POST['post_id'] : false;
+        $nonce = wp_verify_nonce($_POST['nonce'], __FILE__);
 
-        if ( $data && is_numeric( $post_id ) && $nonce ){
-            $success = update_post_meta( $post_id, 'block_content' , $data );
+        if ($data && is_numeric($post_id) && $nonce) {
+            $success = update_post_meta($post_id, 'block_content', $data);
         }
 
-        echo wp_send_json( array( 'status' => $success ) );
+        echo wp_send_json(array('status' => $success));
         exit();
     }
 
@@ -266,7 +292,7 @@ FORM;
         $block_content = isset($_REQUEST['block_content']) ? $_REQUEST['block_content'] : '';
         update_post_meta($post_id, 'block_content', $block_content);
         update_post_meta($post_id, 'block_content_html', $this->get_contents($post_id));
-        if ( $this->force_post_content_save == true ){
+        if ($this->force_post_content_save == true) {
             wp_update_post(array(
                 'ID' => $post_id,
                 'post_content' => $this->get_contents($post_id),

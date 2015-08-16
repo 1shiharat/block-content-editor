@@ -66,9 +66,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-block-content-editor.php';
  * @since    1.0.0
  */
 function run_block_content_editor() {
-
 	$plugin = new Block_Content_Editor();
 	$plugin->run();
-
 }
 run_block_content_editor();

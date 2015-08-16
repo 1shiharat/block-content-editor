@@ -1,11 +1,12 @@
 <?php
-
 /**
  * Class BCE_Block
+ *
+ * すべてのブロックはこのクラスを継承して生成します。
+ *
  */
 class BCE_Block
 {
-
     /**
      * ブロックタイプ
      * @var
@@ -67,18 +68,28 @@ class BCE_Block
     public $public_css = array();
 
 
-    public function __construct(){
-
+    /**
+     * 初期化
+     */
+    public function __construct()
+    {
+        // すべてのブロックの init メソッドを実行
         $this->init();
 
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_script' ), 10, 1 );
+        // すべてのブロックで指定されている管理画面用JavaScriptファイルを読み込み
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_script'), 10, 1);
 
-        add_action( 'wp_enqueue_scripts', array( $this, 'admin_enqueue_script' ), 10,1  );
+        // フロントエディタですべてのブロックで指定されている管理画面用JavaScriptファイルを読み込み
+        if (Block_Content_Editor_Setup::is_front_editor()) {
+            add_action('wp_enqueue_scripts', array($this, 'admin_enqueue_script'), 10, 1);
+        }
 
-        add_action( 'wp_enqueue_scripts', array( $this, 'public_enqueue_script' ), 10,1  );
+        // 公開用として指定されているJavaScriptファイルを読み込み
+        add_action('wp_enqueue_scripts', array($this, 'public_enqueue_script'), 10, 1);
     }
 
-    public function init(){
+    protected function init()
+    {
 
     }
 
@@ -103,7 +114,7 @@ class BCE_Block
     public function template($template, $data = array())
     {
         $source = $template;
-        return preg_replace_callback('/\%(\w+)%/', function($m) use ($data){
+        return preg_replace_callback('/\%(\w+)%/', function ($m) use ($data) {
             if (!isset($data->$m[1])) {
                 return '';
             }
@@ -115,18 +126,20 @@ class BCE_Block
      * フロント画面の静的ファイルを登録
      * @param $hook
      */
-    public function public_enqueue_script( $hook ){
+    public function public_enqueue_script($hook)
+    {
 
-
-        if ( is_array( $this->public_javascript ) && $this->public_javascript  ){
-            foreach( $this->public_javascript as $i => $js_path ){
-                wp_enqueue_script( $this->type . '_' . $i . '_' . 'js', $js_path, array() );
+        if (Block_Content_Editor_Setup::is_front_editor()) {
+            if (is_array($this->public_javascript) && $this->public_javascript) {
+                foreach ($this->public_javascript as $i => $js_path) {
+                    wp_enqueue_script($this->type . '_' . $i . '_' . 'js', $js_path, array());
+                }
             }
-        }
 
-        if ( is_array( $this->public_css ) && $this->public_css ){
-            foreach( $this->public_css as $i => $css_path ){
-                wp_enqueue_style( $this->type . '_' . $i . '_' . 'css', $css_path, array() );
+            if (is_array($this->public_css) && $this->public_css) {
+                foreach ($this->public_css as $i => $css_path) {
+                    wp_enqueue_style($this->type . '_' . $i . '_' . 'css', $css_path, array());
+                }
             }
         }
 
@@ -136,19 +149,21 @@ class BCE_Block
      * 管理画面の静的ファイルを登録
      * @param $hook
      */
-    public function admin_enqueue_script( $hook ){
+    public function admin_enqueue_script($hook)
+    {
 
-        if ( isset( $this->admin_javascript ) && is_array( $this->admin_javascript ) ){
-            foreach( $this->admin_javascript as $i => $js_path ){
-                wp_enqueue_script( $this->type . '_' . $i . '_' . 'js', $js_path, array(), null , true );
-                if ( $this->type == 'tinymce' ){
-                    wp_localize_script(  'tinymce_1_js', 'bce_tinymce_url', array( 'url' =>  plugin_dir_url(__FILE__) . 'tinymce/' )  );
+        if (isset($this->admin_javascript) && is_array($this->admin_javascript)) {
+            foreach ($this->admin_javascript as $i => $js_path) {
+                wp_enqueue_script($this->type . '_' . $i . '_' . 'js', $js_path, array(), null, true);
+                if ($this->type == 'tinymce') {
+                    wp_localize_script('tinymce_1_js', 'bce_tinymce_url', array('url' => plugin_dir_url(__FILE__) . 'tinymce/'));
                 }
             }
         }
-        if ( isset( $this->admin_css ) && is_array( $this->admin_css ) ){
-            foreach( $this->admin_css as $i => $css_path ){
-                wp_enqueue_style( $this->type . '_' . $i . '_' . 'css', $css_path, array() );
+
+        if (isset($this->admin_css) && is_array($this->admin_css)) {
+            foreach ($this->admin_css as $i => $css_path) {
+                wp_enqueue_style($this->type . '_' . $i . '_' . 'css', $css_path, array());
             }
         }
     }

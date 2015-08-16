@@ -2,8 +2,14 @@
 .st-outer {
   font-size: 16px; }
 
+.st-block img {
+  max-width: 100%;
+  height: auto; }
+
 #block-content-editor-container {
-  padding: 2em; }
+  padding: 2em;
+  position: relative;
+  z-index: 10; }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before, [data-icon-after]:after {
@@ -167,10 +173,6 @@
   animation-name: fadeIn;
   animation-iteration-count: infinite; }
 
-#block-content-editor-container {
-  position: relative;
-  z-index: 10000; }
-
 .ripple {
   overflow: hidden; }
 
@@ -324,7 +326,6 @@
   position: absolute;
   bottom: 50px;
   z-index: 10000;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3), 0 2px 2px rgba(0, 0, 0, 0.4);
   background: rgba(23, 83, 103, 0.8);
   display: none;
   padding-left: 0.4em;
@@ -332,6 +333,21 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%; }
+
+.st-block-controls:after {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(136, 183, 213, 0);
+  border-top-color: rgba(23, 83, 103, 0.8);
+  border-width: 10px;
+  margin-left: -10px;
+  z-index: 100; }
 
 .st-block-controls a {
   color: #333; }
@@ -573,7 +589,7 @@ ul.st-text-block {
 .st-msg--error {
   color: #d70014; }
 
-.st-item-ready {
+.st-item-ready .st-block__inner {
   -webkit-animation-duration: .8s;
   animation-duration: 1s;
   -webkit-animation-timing-function: linear;
@@ -584,7 +600,7 @@ ul.st-text-block {
   animation-name: fadeInBlock; }
 
 .st-outer * {
-  box-sizing: content-box;
+  box-sizing: border-box;
   -webkit-transform-style: preserve-3d;
   backface-visibility: hidden; }
 

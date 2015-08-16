@@ -1,7 +1,6 @@
 <?php
-
 /**
- * プラグインのコアとなるクラス
+ * プラグインのコアクラス
  *
  *
  *
@@ -15,8 +14,7 @@ class Block_Content_Editor
 {
 
     /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
+     * プラグインのすべてのフックを登録するローダーをプロパティ
      *
      * @since    1.0.0
      * @access   protected
@@ -25,7 +23,7 @@ class Block_Content_Editor
     protected $loader;
 
     /**
-     * The unique identifier of this plugin.
+     * ユニークなプラグインの識別子
      *
      * @since    1.0.0
      * @access   protected
@@ -34,21 +32,23 @@ class Block_Content_Editor
     protected $plugin_name;
 
     /**
-     * The current version of the plugin.
+     * 現在のバージョン
      *
      * @since    1.0.0
      * @access   protected
      * @var      string $version The current version of the plugin.
      */
     protected $version;
+
+    /**
+     * ブロックオブジェクト
+     *
+     * @var object $blocks すべてのブロッククラスを格納する
+     */
     protected $blocks;
 
     /**
-     * Define the core functionality of the plugin.
-     *
-     * Set the plugin name and the plugin version that can be used throughout the plugin.
-     * Load the dependencies, define the locale, and set the hooks for the admin area and
-     * the public-facing side of the site.
+     * 初期化
      *
      * @since    1.0.0
      */
@@ -94,18 +94,12 @@ class Block_Content_Editor
 
         $this->loader = new Block_Content_Editor_Loader();
 
-
-//        add_action('after_setup_theme', function () use ($self) {
         $this->blocks = new BCE_Blocks($this->get_plugin_name(), $this->get_version());
-//        });
 
     }
 
     /**
      * 多言語化を設定
-     *
-     * Uses the Block_Content_Editor_i18n class in order to set the domain and to register the hook
-     * with WordPress.
      *
      * @since    1.0.0
      * @access   private
@@ -128,7 +122,7 @@ class Block_Content_Editor
     private function define_setup_hooks()
     {
 
-        $plugin_admin = new Block_Content_Editor_Setup($this->get_plugin_name(), $this->get_version());
+        $plugin_admin = new Block_Content_Editor_Setup($this->get_plugin_name(), $this->get_version(), $this->blocks);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
@@ -139,7 +133,7 @@ class Block_Content_Editor
 
 
     /**
-     * Run the loader to execute all of the hooks with WordPress.
+     * ローダーに登録したアクションフックを実行する
      *
      * @since    1.0.0
      */
@@ -149,8 +143,7 @@ class Block_Content_Editor
     }
 
     /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
+     * プラグインの識別子を返す
      *
      * @since     1.0.0
      * @return    string    The name of the plugin.
@@ -161,7 +154,7 @@ class Block_Content_Editor
     }
 
     /**
-     * The reference to the class that orchestrates the hooks with the plugin.
+     * ローダーを取得する
      *
      * @since     1.0.0
      * @return    Block_Content_Editor_Loader    Orchestrates the hooks of the plugin.
@@ -172,7 +165,7 @@ class Block_Content_Editor
     }
 
     /**
-     * Retrieve the version number of the plugin.
+     * プラグインのバージョンを取得する
      *
      * @since     1.0.0
      * @return    string    The version number of the plugin.
