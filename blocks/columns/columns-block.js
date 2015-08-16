@@ -71,7 +71,7 @@
         },
 
         editorHTML: function () {
-            return '<div class="columns-row" id="#{blockID}-columns-row" style="overflow: auto"/>'.replace('#{blockID}', this.blockID);
+            return '<div class="columns-row clearfix" id="#{blockID}-columns-row"/>'.replace('#{blockID}', this.blockID);
         },
 
         _setBlockInner: function () {

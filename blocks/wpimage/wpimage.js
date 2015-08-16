@@ -1,3 +1,5 @@
+(function($){
+
 SirTrevor.Blocks.Wpimage = (function () {
 
     var template  = _.template(
@@ -40,6 +42,60 @@ SirTrevor.Blocks.Wpimage = (function () {
         editorHTML: function () {
             return template(this);
         },
+        onBlockRender: function(){
+            // media uploader
+
+            var closestWrap = '.st-media--uploader';
+            $('.st-mediaupload').on('click',function (e) {
+                e.preventDefault();
+                var file_frame, thumbnails;
+                var button = $(this);
+                var inputId = button.closest(closestWrap).find('.st-url');
+                var render = button.closest(closestWrap).find('.st-media--render img');
+                if (file_frame) {
+                    file_frame.open();
+                    return;
+                }
+                // create the file frame
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: $(this).data('uploader_title'),
+                    button: $(this).data('uploader_button_text'),
+                    multiple: false,
+                    library: {
+                        type: 'image'
+                    }
+                });
+                // get the selected attachments when user confirms selection
+                file_frame.on('select', function (e) {
+
+                    var selected = file_frame.state().get('selection').toJSON(),
+                        store = inputId,
+                        urls = [];
+                    for (var i = selected.length - 1; i >= 0; i--) {
+                        urls.push(selected[i].url);
+                    }
+
+                    store.val(urls).trigger('change');
+                    render.attr('src',urls);
+                    button.closest(closestWrap).addClass('exit_image');
+                    //updateThumbnails(urls, store);
+                });
+                // open the file frame
+                file_frame.open();
+            });
+
+
+            $('.st-mediaremove').on( 'click',function ( e ) {
+                e.preventDefault();
+                var button = $( this ),
+                    parent = $(this).closest(closestWrap).find('.st-media--render img'),
+                    input = $( button.data( 'store' ) ),
+                    store = $(input);
+                parent.attr('src', '');
+                $(this).closest(closestWrap).removeClass('exit_image');
+                input.val( '' ).trigger( 'change' );
+            } );
+        },
         loadData: function (data) {
             // Create our image tag
             //this.$editor.html($('<img>', {src: data.file.url}));
@@ -47,64 +103,5 @@ SirTrevor.Blocks.Wpimage = (function () {
 
     });
 })();
-(function ($) {
-    $(function () {
-        // media uploader
 
-        var closestWrap = '.st-media--uploader';
-        $('.st-mediaupload').on('click',function (e) {
-            e.preventDefault();
-            var file_frame, thumbnails;
-            var button = $(this);
-            var inputId = button.closest(closestWrap).find('.st-url');
-            var render = button.closest(closestWrap).find('.st-media--render img');
-            if (file_frame) {
-                file_frame.open();
-                return;
-            }
-            // create the file frame
-            file_frame = wp.media.frames.file_frame = wp.media({
-                title: $(this).data('uploader_title'),
-                button: $(this).data('uploader_button_text'),
-                multiple: false,
-                library: {
-                    type: 'image'
-                }
-            });
-            // get the selected attachments when user confirms selection
-            file_frame.on('select', function (e) {
-
-                var selected = file_frame.state().get('selection').toJSON(),
-                    store = inputId,
-                    urls = [];
-                for (var i = selected.length - 1; i >= 0; i--) {
-                    urls.push(selected[i].url);
-                }
-
-                store.val(urls).trigger('change');
-                render.attr('src',urls);
-                button.closest(closestWrap).addClass('exit_image');
-                //updateThumbnails(urls, store);
-            });
-            // open the file frame
-            file_frame.open();
-        });
-
-
-        $('.st-mediaremove').on( 'click',function ( e ) {
-            e.preventDefault();
-            var button = $( this ),
-                parent = $(this).closest(closestWrap).find('.st-media--render img'),
-                input = $( button.data( 'store' ) ),
-                store = $(input);
-            parent.attr('src', '');
-            $(this).closest(closestWrap).removeClass('exit_image');
-            input.val( '' ).trigger( 'change' );
-            updateThumbnails( '', store );
-        } );
-
-        function updateThumbnails(urls, args) {
-        }
-
-    });
 })(jQuery);

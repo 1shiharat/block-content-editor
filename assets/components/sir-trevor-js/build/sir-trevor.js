@@ -2976,8 +2976,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.drop_options = Object.assign({}, config.defaults.Block.drop_options, this.drop_options);
 
-	    var drop_html = $(_.template(this.drop_options.html,
-	                                 { block: this, _: _ }));
+	    var template = _.template(this.drop_options.html);
+	    var drop_html = $(template({ block: this, _: _ }));
 
 	    this.$editor.hide();
 	    this.$inputs.append(drop_html);
@@ -16563,7 +16563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  type: 'video',
+	  type: 'Video',
 	  title: function() { return i18n.t('blocks:video:title'); },
 
 	  droppable: true,
@@ -16576,15 +16576,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var source = this.providers[data.source];
 
-	    var protocol = window.location.protocol === "file:" ?
-	      "http:" : window.location.protocol;
+
+	    if ( typeof window.location.protocol !== 'undefined' ){
+	      var protocol = window.location.protocol === "file:" ?
+	        "http:" : window.location.protocol;
+	    } else {
+	      var protocol = "http:";
+	    }
+
 
 	    var aspectRatioClass = source.square ?
 	      'with-square-media' : 'with-sixteen-by-nine-media';
 
+	    var template = _.template(source.html);
+
 	    this.$editor
 	      .addClass('st-block__editor--' + aspectRatioClass)
-	      .html(_.template(source.html, {
+	      .html(template({
 	        protocol: protocol,
 	        remote_id: data.remote_id,
 	        width: this.$editor.width() // for videos like vine
@@ -16748,7 +16756,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  hide: function() {
 	    this.removeCurrentContainer();
-	    this.$el.removeClass('st-block-controls--active');
+	    this.$el.addClass('fadeOut').delay(200).queue(function(){
+	      $(this).removeClass('fadeOut st-block-controls--active').dequeue();
+	    });
 
 	    EventBus.trigger('block:controls:hidden');
 	  },

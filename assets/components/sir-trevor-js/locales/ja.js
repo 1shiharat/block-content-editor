@@ -52,6 +52,9 @@ SirTrevor.Locales.ja = {
     },
     columns: {
       'title' : 'カラム'
+    },
+    break: {
+      'title' : '線'
     }
   }
 };

@@ -49,7 +49,8 @@ class BCE_Blocks
             'quote',
             'list',
             'video',
-            'columns'
+            'columns',
+            'break',
         );
 
         /**

@@ -12,6 +12,8 @@ assets/components/sir-trevor-js/*
 !assets/components/sir-trevor-js/build/
 !assets/components/sir-trevor-js/locales/
 !assets/components/Eventable/
+!assets/components/sir-trevor-js/sir-trevor-icons.css
+!assets/components/sir-trevor-js/public/
 
 assets/components/sir-trevor-columns-block/
 assets/components/jquery/

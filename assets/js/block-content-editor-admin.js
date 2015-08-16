@@ -9,24 +9,37 @@
             self.options = {
                 editorTarget: "#block-content-editor",
                 editorTargetContainer : "#block-content-editor-container",
-                editorBlockType: ["Heading", "Text", "Tinymce", "Wpimage", "List", "Video", "Code","Quote", "Columns"],
+                editorBlockType: ["Heading", "Text", "Tinymce", "Wpimage", "List", "Video", "Code","Quote", "Columns","Break"],
             }
-            self.prototype.mediaUpload();
+
             self.prototype.editorInit();
             self.prototype.eventEditorSave();
             self.prototype.eventEditorTabs();
             self.prototype.editorTabs();
             self.prototype.addFrontEditButton();
+            self.prototype.buttonRippleEffect();
         };
 
         self.prototype = {
 
+            /**
+             * 記事画面で編集ボタンを設置
+             * @returns {boolean}
+             */
             addFrontEditButton: function(){
+
                 var url = $('#view-post-btn a').attr('href');
+
+                if ( typeof url === "undefined" ) {
+                    return false;
+                }
                 var btn = $('<a>').attr('href', url + '?blockcontenteditor=true').text('記事画面で編集').addClass('button').fadeIn('100').css({display: "inline-block"});
                 $('#wp-content-media-buttons').append(btn);
             },
 
+            /**
+             * ブロックタブを追加
+             */
             editorTabs : function(){
                 self.tabsButton = $('#content-html').clone();
                 self.tabsButton = self.tabsButton.attr('id', 'content-block').removeClass('switch-html').addClass('switch-block').text('ブロック');
@@ -38,6 +51,9 @@
                 }
             },
 
+            /**
+             * ブロックタブをクリックした時のイベントを登録
+             */
             eventEditorTabs : function(){
                 $(document).on('click','.wp-editor-tabs .wp-switch-editor',function(){
                     var container = $(self.options.editorTargetContainer);
@@ -73,9 +89,6 @@
                 });
             },
 
-            mediaUpload : function(){
-
-            },
 
             // 設定
             editorSetting : function(){
@@ -101,12 +114,37 @@
             eventEditorSave : function(){
                 $('#publish').on('submit', function (e) {
                     $('#content').text(self.editor.store.toString(true));
-                    //return false;
                 });
             },
+            buttonRippleEffect: function(){
+
+                $('.st-block-control,.st-block-ui-btn').on('click', function (event) {
+                    event.preventDefault();
+
+                    var $div = $('<div/>'),
+                        btnOffset = $(this).offset(),
+                        xPos = event.pageX - btnOffset.left,
+                        yPos = event.pageY - btnOffset.top;
+
+                    $div.addClass('ripple-effect');
+                    var $ripple = $(".ripple-effect");
+                    $ripple.css("height", $(this).height());
+                    $ripple.css("width", $(this).height());
+                    $div
+                        .css({
+                            top: yPos - ($ripple.height()/2),
+                            left: xPos - ($ripple.width()/2),
+                            background: $(this).data("ripple-color")
+                        })
+                        .appendTo($(this));
+
+                    window.setTimeout(function(){
+                        $div.remove();
+                    }, 2000);
+                });
+            }
         }
         return self;
-
 
     });
 
