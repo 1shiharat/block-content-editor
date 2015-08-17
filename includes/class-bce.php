@@ -1,4 +1,5 @@
 <?php
+
 /**
  * プラグインのコアクラス
  *
@@ -6,11 +7,11 @@
  *
  *
  * @since      1.0.0
- * @package    Block_Content_Editor
- * @subpackage Block_Content_Editor/includes
+ * @package    BCE
+ * @subpackage BCE/includes
  * @author     1shiharat <akeome1369@gmail.com>
  */
-class Block_Content_Editor
+class BCE
 {
 
     /**
@@ -18,7 +19,7 @@ class Block_Content_Editor
      *
      * @since    1.0.0
      * @access   protected
-     * @var      Block_Content_Editor_Loader $loader Maintains and registers all hooks for the plugin.
+     * @var      BCE_Loader $loader Maintains and registers all hooks for the plugin.
      */
     protected $loader;
 
@@ -72,29 +73,16 @@ class Block_Content_Editor
      */
     private function load_dependencies()
     {
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-utilis.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-loader.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-parser.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-i18n.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-setup.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-blocks.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-frontend.php';
 
-        /**
-         * Autoloader を読み込む
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-block-content-editor-loader.php';
-
-        /**
-         * 多言語化用の設定の読み込み
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-block-content-editor-i18n.php';
-
-        /**
-         * プラグイン自体のセットアップを読み込み
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-block-content-editor-setup.php';
-        /**
-         * ブロックを読み込み
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'blocks/class-bce-blocks.php';
-
-        $this->loader = new Block_Content_Editor_Loader();
-
-        $this->blocks = new BCE_Blocks($this->get_plugin_name(), $this->get_version());
+        $this->loader = new BCE_Loader();
+        $this->blocks = new BCE_Blocks(BCE_Utilis::get_plugin_name(), BCE_Utilis::get_version());
 
     }
 
@@ -107,8 +95,8 @@ class Block_Content_Editor
     private function set_locale()
     {
 
-        $plugin_i18n = new Block_Content_Editor_i18n();
-        $plugin_i18n->set_domain($this->get_plugin_name());
+        $plugin_i18n = new BCE_i18n();
+        $plugin_i18n->set_domain(BCE_Utilis::get_plugin_name());
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 
     }
@@ -122,7 +110,7 @@ class Block_Content_Editor
     private function define_setup_hooks()
     {
 
-        $plugin_admin = new Block_Content_Editor_Setup($this->get_plugin_name(), $this->get_version(), $this->blocks);
+        $plugin_admin = new BCE_Setup($this->blocks);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
@@ -142,37 +130,16 @@ class Block_Content_Editor
         $this->loader->run();
     }
 
-    /**
-     * プラグインの識別子を返す
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
-     */
-    public function get_plugin_name()
-    {
-        return $this->plugin_name;
-    }
 
     /**
      * ローダーを取得する
      *
      * @since     1.0.0
-     * @return    Block_Content_Editor_Loader    Orchestrates the hooks of the plugin.
+     * @return    BCE_Loader    Orchestrates the hooks of the plugin.
      */
     public function get_loader()
     {
         return $this->loader;
-    }
-
-    /**
-     * プラグインのバージョンを取得する
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
-     */
-    public function get_version()
-    {
-        return $this->version;
     }
 
 }

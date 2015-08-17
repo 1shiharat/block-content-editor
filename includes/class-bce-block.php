@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class BCE_Block
  *
@@ -78,11 +79,7 @@ class BCE_Block
 
         // すべてのブロックで指定されている管理画面用JavaScriptファイルを読み込み
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_script'), 10, 1);
-
-        // フロントエディタですべてのブロックで指定されている管理画面用JavaScriptファイルを読み込み
-        if (Block_Content_Editor_Setup::is_front_editor()) {
-            add_action('wp_enqueue_scripts', array($this, 'admin_enqueue_script'), 10, 1);
-        }
+        add_action('wp_enqueue_scripts', array($this, 'admin_enqueue_script'), 10, 1);
 
         // 公開用として指定されているJavaScriptファイルを読み込み
         add_action('wp_enqueue_scripts', array($this, 'public_enqueue_script'), 10, 1);
@@ -95,62 +92,58 @@ class BCE_Block
 
     /**
      * HTMLへ変換
+     *
+     * BCE_Parser クラスにて記述
+     *
      * @param $data
      * @return mixed
      */
     public function generate_html($data)
     {
         if ($this->template) {
-            return $this->template($this->template, $data);
+            return BCE_Parser::template($this->template, $data);
         }
-    }
-
-    /**
-     * テンプレートをコンパイル
-     * @param $template
-     * @param array $data
-     * @return mixed
-     */
-    public function template($template, $data = array())
-    {
-        $source = $template;
-        return preg_replace_callback('/\%(\w+)%/', function ($m) use ($data) {
-            if (!isset($data->$m[1])) {
-                return '';
-            }
-            return $data->$m[1];
-        }, $source);
     }
 
     /**
      * フロント画面の静的ファイルを登録
+     *
      * @param $hook
+     * @return bool
      */
     public function public_enqueue_script($hook)
     {
 
-        if (Block_Content_Editor_Setup::is_front_editor()) {
-            if (is_array($this->public_javascript) && $this->public_javascript) {
-                foreach ($this->public_javascript as $i => $js_path) {
-                    wp_enqueue_script($this->type . '_' . $i . '_' . 'js', $js_path, array());
-                }
-            }
-
-            if (is_array($this->public_css) && $this->public_css) {
-                foreach ($this->public_css as $i => $css_path) {
-                    wp_enqueue_style($this->type . '_' . $i . '_' . 'css', $css_path, array());
-                }
+        if (!BCE_Utilis::is_enabled_editor()) {
+            return false;
+        }
+        if (is_array($this->public_javascript) && $this->public_javascript) {
+            foreach ($this->public_javascript as $i => $js_path) {
+                wp_enqueue_script($this->type . '_' . $i . '_' . 'js', $js_path, array());
             }
         }
+
+        if (is_array($this->public_css) && $this->public_css) {
+            foreach ($this->public_css as $i => $css_path) {
+                wp_enqueue_style($this->type . '_' . $i . '_' . 'css', $css_path, array());
+            }
+        }
+
 
     }
 
     /**
      * 管理画面の静的ファイルを登録
+     *
      * @param $hook
+     * @return bool
      */
     public function admin_enqueue_script($hook)
     {
+
+        if (!BCE_Utilis::is_enabled_editor()) {
+            return false;
+        }
 
         if (isset($this->admin_javascript) && is_array($this->admin_javascript)) {
             foreach ($this->admin_javascript as $i => $js_path) {
@@ -167,5 +160,6 @@ class BCE_Block
             }
         }
     }
+
 
 }

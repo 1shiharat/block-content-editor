@@ -34,8 +34,8 @@ if ( ! defined( 'WPINC' ) ) {
  * This action is documented in includes/class-block-content-editor-activator.php
  */
 function activate_block_content_editor() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-block-content-editor-activator.php';
-	Block_Content_Editor_Activator::activate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-bce-activator.php';
+	BCE_Activator::activate();
 }
 
 /**
@@ -43,8 +43,8 @@ function activate_block_content_editor() {
  * This action is documented in includes/class-block-content-editor-deactivator.php
  */
 function deactivate_block_content_editor() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-block-content-editor-deactivator.php';
-	Block_Content_Editor_Deactivator::deactivate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-bce-deactivator.php';
+	BCE_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_block_content_editor' );
@@ -54,7 +54,7 @@ register_deactivation_hook( __FILE__, 'deactivate_block_content_editor' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-block-content-editor.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-bce.php';
 
 /**
  * Begins execution of the plugin.
@@ -66,7 +66,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-block-content-editor.php';
  * @since    1.0.0
  */
 function run_block_content_editor() {
-	$plugin = new Block_Content_Editor();
+	$plugin = new BCE();
 	$plugin->run();
 }
 add_action('after_setup_theme', 'run_block_content_editor');

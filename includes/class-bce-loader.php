@@ -20,7 +20,7 @@
  * @subpackage Block_Content_Editor/includes
  * @author     1shiharat <akeome1369@gmail.com>
  */
-class Block_Content_Editor_Loader
+class BCE_Loader
 {
 
     /**

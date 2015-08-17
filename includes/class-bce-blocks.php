@@ -7,31 +7,45 @@ class BCE_Blocks
 
     public $plugin_name = '';
 
-    // ブロックのタイプ
     public $types = array();
 
     public $meta_key = 'block_contents';
 
-    /**
-     * 初期化
-     * @param $plugin_name
-     */
-    public function __construct($plugin_name)
-    {
-        $this->plugin_name = $plugin_name;
+    private static $instance = null;
 
-        $this->force_post_content_save = true;
+    /**
+     * クラスの初期化
+     */
+    public function __construct()
+    {
+        $this->plugin_name = BCE_Utilis::get_plugin_name();
+
+        $this->force_post_content_save = apply_filters( 'bce_force_replace_post_content', true );
 
         spl_autoload_register(array($this, 'bce_autoloader'));
+
         $this->set_types();
         $this->set_blocks();
 
-        add_filter('the_content', array($this, 'the_content'), 11, 1);
         add_filter('the_content', array($this, 'filter_post_content'), 10, 1);
-        add_action('wp_ajax_front-block-content-editor-save', array($this, 'post_save'));
+
         add_action('save_post', array($this, 'block_content_update'), 10, 1);
         add_action('wp_enqueue_scripts', array($this, 'output_localize_script'), 0, 1);
         add_action('admin_enqueue_scripts', array($this, 'output_localize_script'), 0, 1);
+    }
+
+
+    /**
+     * シングルトンインスタンスを取得
+     *
+     * @return BCE_Blocks|null
+     */
+    public static function get_instance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self;
+        }
+        return self::$instance;
     }
 
 
@@ -40,6 +54,10 @@ class BCE_Blocks
      */
     public function output_localize_script()
     {
+        if ( ! BCE_Utilis::is_enabled_editor() ){
+            return false;
+        }
+
         $types = array_map(function ($t) {
             return ucfirst($t);
         }, $this->get_types());
@@ -53,7 +71,6 @@ class BCE_Blocks
             ),
             'blockTypes' => $types,
         );
-
         $id = $this->plugin_name;
         wp_localize_script($id, 'BCEConfig', $config);
     }
@@ -84,6 +101,7 @@ class BCE_Blocks
          * フィールドを外部から追加できるように
          */
         $this->types = apply_filters('bce_blocks_types', $types);
+
         return $this->types;
     }
 
@@ -99,6 +117,7 @@ class BCE_Blocks
 
     /**
      * 一つのブロックタイプをセット
+     *
      * @param $type
      */
     public function set_type($type)
@@ -106,6 +125,11 @@ class BCE_Blocks
         $this->types = array_merge($this->types, array($type));
     }
 
+    /**
+     * 各ブロックのインスタンスを生成し、blocks プロパティに格納する
+     *
+     * @return void
+     */
     public function set_blocks()
     {
         foreach ($this->types as $type) {
@@ -118,15 +142,21 @@ class BCE_Blocks
 
     /**
      * post_content フィルターにかませる
+     *
      * @param $content
      * @return string
      */
     public function filter_post_content($content)
     {
-        $block_content = get_post_meta(get_the_ID(), 'block_content_html', true);
-
-        if ($block_content) {
-            return $block_content;
+        // 強制更新がONの場合はそのまま返す
+        if ( $this->force_post_content_save ){
+            return $content;
+        } else {
+            // オフの場合は、カスタムフィールドからHTMLを取得
+            $block_content = get_post_meta(get_the_ID(), 'block_content_html', true);
+            if ($block_content) {
+                return $block_content;
+            }
         }
 
         return $content;
@@ -134,7 +164,10 @@ class BCE_Blocks
 
 
     /**
-     * コンテンツを取得
+     * ブロックコンテンツを取得
+     *
+     * カスタムフィールドからJSONを取得し、HTMLへと変換後、値を返す
+     *
      * @param int $post_id
      * @return string
      */
@@ -162,7 +195,8 @@ class BCE_Blocks
     }
 
     /**
-     * 変換
+     * 各ブロックの generate_html メソッドを呼出し、HTMLへと変換後、値を返す
+     *
      * @param $type
      * @param $data
      * @return string
@@ -171,23 +205,26 @@ class BCE_Blocks
     {
         if (isset($this->blocks[$type])) {
             return $this->blocks[$type]->generate_html($data, $this->blocks);
-
         }
         return "";
     }
 
     /**
      * ブロッククラスのオートロード
+     *
+     * 擬似名前空間として "BCE_" のプレフィックスを持つものに関してのみ、ファイルが存在する場合には読み込む
+     *
+     * @return void
      */
     public function bce_autoloader($class_name)
     {
         if (strpos('BCE_', $classname) >= 0) {
             $class_name = str_replace('BCE_', '', $class_name);
             $themeclassesdir = get_template_directory() . DIRECTORY_SEPARATOR . 'blocks' . DIRECTORY_SEPARATOR . lcfirst($class_name) . DIRECTORY_SEPARATOR;
-            $classbasedir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
+            $classbasedir = BCE_Utilis::get_base_dir() . '/blocks';
             $classes_dir = $classbasedir . DIRECTORY_SEPARATOR . lcfirst($class_name) . DIRECTORY_SEPARATOR;
             $class_file = str_replace('_', DIRECTORY_SEPARATOR, lcfirst($class_name)) . '.php';
-            if ( file_exists( $themeclassesdir . $class_file ) ){
+            if (file_exists($themeclassesdir . $class_file)) {
                 require_once $themeclassesdir . $class_file;
             } else if (file_exists($classes_dir . $class_file)) {
                 require_once $classes_dir . $class_file;
@@ -196,111 +233,40 @@ class BCE_Blocks
 
     }
 
-    /**
-     * コンテンツをエディタに置換
-     * @param $content
-     * @return string
-     */
-    public function the_content($content)
-    {
-
-        if ($this->check_edit_post()) {
-
-            $post_id = get_the_ID();
-            $block_content = get_post_meta($post_id, 'block_content', true);
-            require_once WPINC . '/class-wp-editor.php';
-            wp_editor('', 'content', array(
-                'textarea_rows' => 15,
-                'teeny' => true,
-                'quicktags' => true,
-                'media_buttons' => true,
-            ));
-            $save_text = __('Save', 'block-content-editor');
-            $nonce = wp_create_nonce(__FILE__);
-            $form = <<<FORM
-<div id="front-block-content-editor-container" style="display: block; background: #fff;">
-    <form name="front-block-content-editor-form" id="front-block-content-editor-form" action="?" method="post">
-        <input type="hidden" name="front-block-content-editor-nonce" id="front-block-content-editor-nonce" value="$nonce" />
-        <input type="hidden" name="front-block-content-editor-post_id" id="front-block-content-editor-post_id" value="$post_id" />
-        <textarea name="block_content" id="front-block-content-editor" style="display: none;">$block_content</textarea>
-        <div class="front-block-content-editor__submit">
-            <button id="front-block-content-editor-submit" type="submit">$save_text</button>
-        </div>
-    </form>
-    </div>
-FORM;
-            return $form;
-
-
-        }
-        return $content;
-
-    }
-
-    /**
-     * 編集していい記事がチェック
-     * @return bool
-     */
-    public function check_edit_post()
-    {
-
-        $vaild = true;
-        $this_post_id = get_the_ID();
-
-        if (!isset($_GET['blockcontenteditor']) || $_GET['blockcontenteditor'] !== 'true') {
-            $vaild = false;
-        }
-
-        if (isset($_SERVER['HTTP_REFERER'])) {
-            $url = parse_url($_SERVER['HTTP_REFERER']);
-            if (isset($url['query'])) {
-                parse_str($url['query']);
-                $post_id = (isset($post)) ? intval($post) : false;
-            } else {
-                $vaild = false;
-            }
-            if ($post_id !== $this_post_id) {
-                $vaild = false;
-            }
-        } else {
-            $vaild = false;
-        }
-        return $vaild;
-    }
-
-    /**
-     * データを保存
-     */
-    public function post_save()
-    {
-        $success = 0;
-        $data = isset($_POST['json']) ? $_POST['json'] : false;
-        $post_id = isset($_POST['post_id']) ? $_POST['post_id'] : false;
-        $nonce = wp_verify_nonce($_POST['nonce'], __FILE__);
-
-        if ($data && is_numeric($post_id) && $nonce) {
-            $success = update_post_meta($post_id, 'block_content', $data);
-        }
-
-        echo wp_send_json(array('status' => $success));
-        exit();
-    }
 
     /**
      * 記事を保存するタイミングで、カスタムフィールドとしてブロックエディタのコンテンツを保存する
      * @param $post_id
+     *
+     * @return bool
      */
     public function block_content_update($post_id)
     {
         remove_action('save_post', array($this, 'block_content_update'));
+
+        if ( ! BCE_Utilis::is_enabled_editor() ){
+            return false;
+        }
+
         $block_content = isset($_REQUEST['block_content']) ? $_REQUEST['block_content'] : '';
+
+        if (!$block_content) {
+            return false;
+        }
+
         update_post_meta($post_id, 'block_content', $block_content);
-        update_post_meta($post_id, 'block_content_html', $this->get_contents($post_id));
+
+        /**
+         * 強制保存が有効な場合は投稿コンテンツに保存。
+         * それ以外の場合には、カスタムフィールドに値を保存する
+         **/
         if ($this->force_post_content_save == true) {
             wp_update_post(array(
                 'ID' => $post_id,
                 'post_content' => $this->get_contents($post_id),
             ));
+        } else {
+            update_post_meta($post_id, 'block_content_html', $this->get_contents($post_id));
         }
         add_action('save_post', array($this, 'block_content_update'));
     }

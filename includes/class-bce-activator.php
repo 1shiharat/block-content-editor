@@ -19,7 +19,7 @@
  * @subpackage Block_Content_Editor/includes
  * @author     1shiharat <akeome1369@gmail.com>
  */
-class Block_Content_Editor_Activator {
+class BCE_Activator {
 
 	/**
 	 * Short Description. (use period)

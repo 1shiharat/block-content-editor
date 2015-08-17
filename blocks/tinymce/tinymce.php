@@ -66,8 +66,6 @@ class BCE_Tinymce extends BCE_Block{
 
     public function init(){
 
-//        add_action( 'admin_print_footer_scripts', array( $this, 'tinymce_add_scripts' ), 50 );
-
         $this->type = 'tinymce';
         $this->class = 'tinymce';
         $this->param = array( 'text' );

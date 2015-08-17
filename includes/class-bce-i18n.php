@@ -24,7 +24,7 @@
  * @subpackage Block_Content_Editor/includes
  * @author     1shiharat <akeome1369@gmail.com>
  */
-class Block_Content_Editor_i18n
+class BCE_i18n
 {
 
     /**
