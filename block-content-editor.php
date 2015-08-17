@@ -1,20 +1,15 @@
 <?php
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
+ * プラグインメインファイル
  *
  * @link              http://grow-group.jp
  * @since             1.0.0
- * @package           Block_Content_Editor
+ * @package           BCE
  *
  * @wordpress-plugin
- * Plugin Name:       Block Content Editor
+ * Plugin Name:       BCE
  * Plugin URI:        http://github.com/1shiharat/block-content-editor
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       block based visual editor.
  * Version:           1.0.0
  * Author:            1shiharat
  * Author URI:        http://grow-group.jp
@@ -24,14 +19,12 @@
  * Domain Path:       /languages
  */
 
-// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-block-content-editor-activator.php
+ * 有効時のアクション
  */
 function activate_block_content_editor() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-bce-activator.php';
@@ -39,8 +32,7 @@ function activate_block_content_editor() {
 }
 
 /**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-block-content-editor-deactivator.php
+ * 無効化時のアクション
  */
 function deactivate_block_content_editor() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-bce-deactivator.php';
@@ -51,17 +43,14 @@ register_activation_hook( __FILE__, 'activate_block_content_editor' );
 register_deactivation_hook( __FILE__, 'deactivate_block_content_editor' );
 
 /**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
+ * プラグインコアファイルを読み込み
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-bce.php';
 
 /**
- * Begins execution of the plugin.
+ * プラグインを実行する関数
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
+ * after_setup_theme フックで実行
  *
  * @since    1.0.0
  */

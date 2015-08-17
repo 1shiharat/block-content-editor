@@ -7,6 +7,9 @@
  * @subpackage Block_Content_Editor/Setup
  * @author     1shiharat <akeome1369@gmail.com>
  */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 class BCE_Setup
 {
 
@@ -215,7 +218,7 @@ class BCE_Setup
         );
 
         // アクションフックを仕込んでおく
-        $translate = apply_filters('bce_editor_locales', $translate);
+        $translate = apply_filters('bce_register_languages', $translate);
 
         // JSON に変換
         $data = json_encode($translate);

@@ -1,8 +1,10 @@
 <?php
-
 /**
- * ユーティティー
+ * ユーティティクラス
  */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 class BCE_Utilis
 {
 

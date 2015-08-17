@@ -20,6 +20,9 @@
  * @subpackage Block_Content_Editor/includes
  * @author     1shiharat <akeome1369@gmail.com>
  */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 class BCE_Loader
 {
 

@@ -1,16 +1,16 @@
 <?php
-
 /**
  * プラグインのコアクラス
- *
- *
- *
  *
  * @since      1.0.0
  * @package    BCE
  * @subpackage BCE/includes
  * @author     1shiharat <akeome1369@gmail.com>
  */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
+
 class BCE
 {
 
@@ -82,7 +82,9 @@ class BCE
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-frontend.php';
 
         $this->loader = new BCE_Loader();
-        $this->blocks = new BCE_Blocks(BCE_Utilis::get_plugin_name(), BCE_Utilis::get_version());
+
+        // ブロッククラスはシングルトンとしてインスタンスを取得
+        $this->blocks = BCE_Blocks::get_instance();
 
     }
 

@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 class BCE_Parser {
 
     /**

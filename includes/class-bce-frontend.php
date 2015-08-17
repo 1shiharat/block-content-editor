@@ -2,6 +2,9 @@
 /**
  * フロントエンドでの編集の動作クラス
  */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 class BCE_Frontend
 {
 

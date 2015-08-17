@@ -1,5 +1,12 @@
 <?php
+/**
+ * ブロックの設定、有効化
+ *
+ */
 
+if (!defined('WPINC')) {
+    die;
+}
 require_once "class-bce-block.php";
 
 class BCE_Blocks
@@ -16,11 +23,11 @@ class BCE_Blocks
     /**
      * クラスの初期化
      */
-    public function __construct()
+    private function __construct()
     {
         $this->plugin_name = BCE_Utilis::get_plugin_name();
 
-        $this->force_post_content_save = apply_filters( 'bce_force_replace_post_content', true );
+        $this->force_post_content_save = apply_filters('bce_force_replace_post_content', true);
 
         spl_autoload_register(array($this, 'bce_autoloader'));
 
@@ -54,7 +61,7 @@ class BCE_Blocks
      */
     public function output_localize_script()
     {
-        if ( ! BCE_Utilis::is_enabled_editor() ){
+        if (!BCE_Utilis::is_enabled_editor()) {
             return false;
         }
 
@@ -149,7 +156,7 @@ class BCE_Blocks
     public function filter_post_content($content)
     {
         // 強制更新がONの場合はそのまま返す
-        if ( $this->force_post_content_save ){
+        if ($this->force_post_content_save) {
             return $content;
         } else {
             // オフの場合は、カスタムフィールドからHTMLを取得
@@ -161,7 +168,6 @@ class BCE_Blocks
 
         return $content;
     }
-
 
     /**
      * ブロックコンテンツを取得
@@ -244,7 +250,7 @@ class BCE_Blocks
     {
         remove_action('save_post', array($this, 'block_content_update'));
 
-        if ( ! BCE_Utilis::is_enabled_editor() ){
+        if (!BCE_Utilis::is_enabled_editor()) {
             return false;
         }
 

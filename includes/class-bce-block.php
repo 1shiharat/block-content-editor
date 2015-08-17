@@ -1,11 +1,14 @@
 <?php
-
 /**
  * Class BCE_Block
  *
- * すべてのブロックはこのクラスを継承して生成します。
+ * すべてのブロックはこのクラスを継承して生成
  *
  */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
+
 class BCE_Block
 {
     /**
@@ -13,12 +16,6 @@ class BCE_Block
      * @var
      */
     public $type;
-
-    /**
-     * ブロックのクラス
-     * @var
-     */
-    public $class;
 
     /**
      * ブロックのパラメータ
@@ -85,6 +82,9 @@ class BCE_Block
         add_action('wp_enqueue_scripts', array($this, 'public_enqueue_script'), 10, 1);
     }
 
+    /**
+     * 子クラスの初期化メソッド
+     */
     protected function init()
     {
 
