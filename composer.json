@@ -1,0 +1,15 @@
+{
+    "name": "1shiharat/block-content-editor",
+    "description": "Sir Trevor based block content editor for WordPress",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Ishihara Takashi",
+            "email": "akeome1369@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+      "files": ["block-content-editor.php"] 
+    }
+}
