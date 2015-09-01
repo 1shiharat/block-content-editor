@@ -8,9 +8,9 @@ sitemap.xml
 sitemap.xml.gz
 
 node_modules/
-assets/components/sir-trevor-js/*
-!assets/components/sir-trevor-js/build/
-!assets/components/sir-trevor-js/locales/
+assets/components/bce-trevor-js/*
+!assets/components/bce-trevor-js/build/
+!assets/components/bce-trevor-js/locales/
 !assets/components/Eventable/
 !assets/components/sir-trevor-js/sir-trevor-icons.css
 !assets/components/sir-trevor-js/public/

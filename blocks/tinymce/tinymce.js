@@ -6,30 +6,30 @@
 
 (function ($) {
 
-    function bce_tinymce_init(selector){
-        if ( $('#').length > 0 ){
+    function bce_tinymce_init(selector) {
+        if ($('#').length > 0) {
             $('#wp-front_editor_init-wrap').remove();
         }
-        if ( typeof tinyMCEPreInit.mceInit.content !== "undefined" ) {
+        if (typeof tinyMCEPreInit.mceInit.content !== "undefined") {
             var settings = _.clone(tinyMCEPreInit.mceInit.content);
         } else {
             var settings = {};
         }
-        console.log(selector);
+
         settings.selector = selector;
         settings.height = "500";
         settings.plugins = "paste,wordpress,media,fullscreen,wpeditimage,wpgallery,wpview,wplink,hr,tabfocus,textcolor,wpautoresize,codemirror,wpemoji";
         settings.theme_advanced_toolbar_location = "top";
         settings.theme_advanced_styles = "Header 1=h1;Header 2=header2;Header 3=header3;",
-        settings.theme_advanced_buttons1 = "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv,separator,separator,code",
-        settings.theme_advanced_buttons2 = "formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,|,outdent,indent,|,undo,redo,wp_help";
+            settings.theme_advanced_buttons1 = "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv,separator,separator,code",
+            settings.theme_advanced_buttons2 = "formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,|,outdent,indent,|,undo,redo,wp_help";
         settings.menubar = true;
         settings.wpautop = true;
         settings.language = "ja";
-        settings.remove_linebreaks =  false;
-        settings.force_br_newlines =  true;
-        settings.force_p_newlines =  false;
-        settings.forced_root_block =  '';
+        settings.remove_linebreaks = false;
+        settings.force_br_newlines = true;
+        settings.force_p_newlines = false;
+        settings.forced_root_block = '';
         settings.codemirror = {
             indentOnInit: true, // Whether or not to indent code on init.
             path: "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.5.0/", // Path to CodeMirror distribution
@@ -42,7 +42,13 @@
                 'mode/php/php.js'
             ]
         };
-
+         
+        // リアルタイムで反映する
+        settings.setup = function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        }
 
         settings.wp_autoresize_on = false;
 
@@ -148,7 +154,7 @@
 
             editorHTML: function () {
                 var template = _.template("<div class='st-text-block st-tinymce-block st-tinymce-block_<%= blockID%>' contenteditable='false'></div>");
-                return template( {blockID: this.blockID} );
+                return template({blockID: this.blockID});
             },
 
             // Function; Executed on render of the block if some data is provided.
@@ -221,9 +227,9 @@
             toHTML: function (html) {
                 return html;
             },
-            setTextBlockHTML: function(html) {
-                return html;
-            }
+            getTextBlockHTML: function () {
+                return this.$('.st-tinymce-block_' + this.blockID).html();
+            },
         });
 
     })();

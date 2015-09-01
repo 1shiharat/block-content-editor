@@ -80,8 +80,11 @@ class BCE
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-setup.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-blocks.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-frontend.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-settings-api.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bce-admin.php';
 
         $this->loader = new BCE_Loader();
+        $this->admin = new BCE_Admin();
 
         // ブロッククラスはシングルトンとしてインスタンスを取得
         $this->blocks = BCE_Blocks::get_instance();

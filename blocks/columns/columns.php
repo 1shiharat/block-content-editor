@@ -1,8 +1,10 @@
 <?php
+
 /**
  * カラム
  */
-class BCE_Columns extends BCE_Block{
+class BCE_Columns extends BCE_Block
+{
 
     /**
      * ブロックタイプ
@@ -64,9 +66,10 @@ class BCE_Columns extends BCE_Block{
      */
     public $public_css = array();
 
-    public function init(){
+    public function init()
+    {
 
-        $this->framework = apply_filters( 'bce_blocks_type_columns_framework', 'foundation' );
+        $this->framework = apply_filters('bce_blocks_type_columns_framework', 'foundation');
 
         $this->type = 'columns';
 
@@ -81,14 +84,14 @@ class BCE_Columns extends BCE_Block{
         );
     }
 
-    public function generate_html($data, $block_instance){
-
+    public function generate_html($data, $block_instance)
+    {
         $html = '<div class="bce-block bce-block__columns ' . $this->get_row_markup() . '">';
-        foreach( $data->columns as $key => $column ){
+        foreach ($data->columns as $key => $column) {
             $width = $column->width;
             $blocks = $column->blocks;
-            $html .= '<div class="bce-block__columns__item ' . $this->get_grid_classname( $width ) . '">';
-            foreach( $blocks as $block ) {
+            $html .= '<div class="bce-block__columns__item ' . $this->get_grid_classname($width) . '">';
+            foreach ($blocks as $block) {
                 $html .= $block_instance[$block->type]->generate_html($block->data, $this->blocks);
             }
             $html .= '</div>';
@@ -97,18 +100,20 @@ class BCE_Columns extends BCE_Block{
         return $html;
     }
 
-    public function get_row_markup(){
-        if ( $this->framework == 'foundation' ){
+    public function get_row_markup()
+    {
+        if ($this->framework == 'foundation') {
             return "row";
-        } else if ( $this->framework == 'bootstrap' ){
+        } else if ($this->framework == 'bootstrap') {
             return "row";
         }
     }
 
-    public function get_grid_classname( $num ){
-        if ( $this->framework == 'foundation' ){
+    public function get_grid_classname($num)
+    {
+        if ($this->framework == 'foundation') {
             return "columns large-" . $this->calc_num($num);
-        } else if ( $this->framework == 'bootstrap' ){
+        } else if ($this->framework == 'bootstrap') {
             return "col-lg-" . $this->calc_num($num);
         }
     }
@@ -121,13 +126,12 @@ class BCE_Columns extends BCE_Block{
      * @param $num
      * @return mixed|void
      */
-    public function calc_num($num){
+    public function calc_num($num)
+    {
         $base = 12;
-        $base_num = $num/$base;
-        $grid_num = apply_filters( 'bce_blocks_type_columns_grid_num', 12 );
+        $base_num = $num / $base;
+        $grid_num = apply_filters('bce_blocks_type_columns_grid_num', 12);
         return $grid_num * $base_num;
     }
 
 }
-
-?>

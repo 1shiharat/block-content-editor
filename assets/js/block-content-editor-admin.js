@@ -14,11 +14,12 @@
             }
 
             self.prototype.editorInit();
-            self.prototype.eventEditorSave();
+
             self.prototype.eventEditorTabs();
             self.prototype.editorTabs();
             self.prototype.addFrontEditButton();
             self.prototype.buttonRippleEffect();
+            self.prototype.eventEditorSave();
         };
 
         self.prototype = {
@@ -113,12 +114,21 @@
 
             // データ保存時のイベント
             eventEditorSave : function(){
-                $('#publish').on('submit', function (e) {
-                    $('#content').text(self.editor.store.toString(true));
+                $('#publish').on('click', function(e) {
+                    if ( !$('#block-content-editor').hasClass('already-save') ) {
+                        e.preventDefault();
+                        var button = this;
+
+                        $('#block-content-editor').addClass('already-save');
+
+                        $('#block-content-editor').text(self.editor.store.toString(true));
+                        $(button).click();
+
+                    }
                 });
             },
-            buttonRippleEffect: function(){
 
+            buttonRippleEffect: function(){
                 $('.st-block-control').on('click', function (event) {
                     event.preventDefault();
 

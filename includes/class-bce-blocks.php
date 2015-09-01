@@ -3,7 +3,6 @@
  * ブロックの設定、有効化
  *
  */
-
 if (!defined('WPINC')) {
     die;
 }
@@ -11,13 +10,9 @@ require_once "class-bce-block.php";
 
 class BCE_Blocks
 {
-
     public $plugin_name = '';
-
     public $types = array();
-
     public $meta_key = 'block_contents';
-
     private static $instance = null;
 
     /**
@@ -26,21 +21,15 @@ class BCE_Blocks
     private function __construct()
     {
         $this->plugin_name = BCE_Utilis::get_plugin_name();
-
         $this->force_post_content_save = apply_filters('bce_force_replace_post_content', true);
-
         spl_autoload_register(array($this, 'bce_autoloader'));
-
         $this->set_types();
         $this->set_blocks();
-
         add_filter('the_content', array($this, 'filter_post_content'), 10, 1);
-
         add_action('save_post', array($this, 'block_content_update'), 10, 1);
         add_action('wp_enqueue_scripts', array($this, 'output_localize_script'), 0, 1);
         add_action('admin_enqueue_scripts', array($this, 'output_localize_script'), 0, 1);
     }
-
 
     /**
      * シングルトンインスタンスを取得
@@ -55,7 +44,6 @@ class BCE_Blocks
         return self::$instance;
     }
 
-
     /**
      * JavaScript へ値を渡すためのメソッド
      */
@@ -64,11 +52,9 @@ class BCE_Blocks
         if (!BCE_Utilis::is_enabled_editor()) {
             return false;
         }
-
         $types = array_map(function ($t) {
             return ucfirst($t);
         }, $this->get_types());
-
         $config = array(
             'config' => array(
                 'language' => get_locale(),
@@ -87,7 +73,6 @@ class BCE_Blocks
      */
     public function set_types()
     {
-
         /**
          * デフォルトのブロックタイプ
          */
@@ -102,13 +87,11 @@ class BCE_Blocks
             'columns',
             'break',
         );
-
         /**
          * フィルターを追加
          * フィールドを外部から追加できるように
          */
         $this->types = apply_filters('bce_blocks_types', $types);
-
         return $this->types;
     }
 
@@ -120,7 +103,6 @@ class BCE_Blocks
     {
         return $this->types;
     }
-
 
     /**
      * 一つのブロックタイプをセット
@@ -165,7 +147,6 @@ class BCE_Blocks
                 return $block_content;
             }
         }
-
         return $content;
     }
 
@@ -179,13 +160,10 @@ class BCE_Blocks
      */
     public function get_contents($post_id = 0)
     {
-
         if (!$post_id) {
             $post_id = get_the_ID();
         }
-
         $block_content = get_post_meta($post_id, 'block_content', true);
-
         if ($block_content) {
             $html = '';
             $blocks = json_decode($block_content);
@@ -193,7 +171,6 @@ class BCE_Blocks
                 $type = $block->type;
                 $data = $block->data;
                 $html .= $this->generate($type, $data);
-
             }
             return $html;
         }
@@ -222,9 +199,9 @@ class BCE_Blocks
      *
      * @return void
      */
-    public function bce_autoloader($class_name)
+    public function bce_autoloader( $class_name )
     {
-        if (strpos('BCE_', $classname) >= 0) {
+        if (strpos('BCE_', $class_name) >= 0) {
             $class_name = str_replace('BCE_', '', $class_name);
             $themeclassesdir = get_template_directory() . DIRECTORY_SEPARATOR . 'blocks' . DIRECTORY_SEPARATOR . lcfirst($class_name) . DIRECTORY_SEPARATOR;
             $classbasedir = BCE_Utilis::get_base_dir() . '/blocks';
@@ -236,9 +213,7 @@ class BCE_Blocks
                 require_once $classes_dir . $class_file;
             }
         }
-
     }
-
 
     /**
      * 記事を保存するタイミングで、カスタムフィールドとしてブロックエディタのコンテンツを保存する
@@ -249,19 +224,15 @@ class BCE_Blocks
     public function block_content_update($post_id)
     {
         remove_action('save_post', array($this, 'block_content_update'));
-
         if (!BCE_Utilis::is_enabled_editor()) {
             return false;
         }
-
         $block_content = isset($_REQUEST['block_content']) ? $_REQUEST['block_content'] : '';
 
         if (!$block_content) {
             return false;
         }
-
         update_post_meta($post_id, 'block_content', $block_content);
-
         /**
          * 強制保存が有効な場合は投稿コンテンツに保存。
          * それ以外の場合には、カスタムフィールドに値を保存する
@@ -276,5 +247,4 @@ class BCE_Blocks
         }
         add_action('save_post', array($this, 'block_content_update'));
     }
-
 }
