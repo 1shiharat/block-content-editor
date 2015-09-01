@@ -42,7 +42,7 @@
                 'mode/php/php.js'
             ]
         };
-         
+
         // リアルタイムで反映する
         settings.setup = function (editor) {
             editor.on('change', function () {
