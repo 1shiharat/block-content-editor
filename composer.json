@@ -1,7 +1,7 @@
 {
     "name": "1shiharat/block-content-editor",
     "description": "Sir Trevor based block content editor for WordPress",
-    "license": "GPL",
+    "license": "GPL-2",
     "authors": [
         {
             "name": "Ishihara Takashi",
