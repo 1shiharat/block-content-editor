@@ -3,14 +3,14 @@
  * プラグインメインファイル
  *
  * @link              http://grow-group.jp
- * @since             1.0.0
+ * @since             0.0.4
  * @package           BCE
  *
  * @wordpress-plugin
  * Plugin Name:       BCE
  * Plugin URI:        http://github.com/1shiharat/block-content-editor
  * Description:       block based visual editor.
- * Version:           1.0.0
+ * Version:           0.0.4
  * Author:            1shiharat
  * Author URI:        http://grow-group.jp
  * License:           GPL-2.0+

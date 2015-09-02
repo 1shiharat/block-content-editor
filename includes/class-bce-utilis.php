@@ -74,7 +74,11 @@ class BCE_Utilis
      * 投稿タイプをチェック
      */
     static public function get_post_type(){
-        return static::$options['bce_post_type'];
+        if ( isset( static::$options['bce_post_type'] ) && static::$options['bce_post_type'] ) {
+            return static::$options['bce_post_type'];
+        } else {
+            return array('post', 'page');
+        }
     }
 
     /**

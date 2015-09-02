@@ -41,6 +41,10 @@ class BCE_Setup
     {
 
         BCE_Utilis::set_option();
+
+        // 自動最大高さ機能をオフ
+        set_user_setting( 'editor_expand', 'off' );
+
         $this->plugin_name = BCE_Utilis::get_plugin_name();
         $this->version = BCE_Utilis::get_version();
         $this->blocks = $blocks;
@@ -154,6 +158,7 @@ class BCE_Setup
         if (!BCE_Utilis::is_enabled_editor()) {
             return $content;
         }
+
         $post_id = isset($_REQUEST['post']) ? intval($_REQUEST['post']) : '';
         $block_content = get_post_meta($post_id, 'block_content', true);
         return $content . '<div id="block-content-editor-container" style="display: none; background: #fff;"><textarea name="block_content" id="block-content-editor">' . $block_content . '</textarea></div>';
