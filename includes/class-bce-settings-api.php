@@ -286,13 +286,19 @@ if (!class_exists('settingApi')):
          */
         function callback_post_type($args)
         {
-            $types = get_post_types(array('public' => true,), 'objects');
+            $types = get_post_types(array('public' => true,'exclude_from_search' => false), 'objects');
+
             $options = '';
 
             $value = $this->get_option($args['id'], $args['section'], $args['std']);
 
             foreach ($types as $t) {
                 $checked = 0;
+
+                if ( $t->name == 'attachment' ){
+                    continue;
+                }
+
                 foreach( $value as $v ){
                     if (  $v == $t->name  ){
                         $checked =  $v;

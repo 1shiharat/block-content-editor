@@ -12,6 +12,28 @@ class BCE_Utilis
 
     static public $plugin_name = 'block-content-editor';
 
+    static public $options = array();
+
+    /**
+     * 設定をセットする
+     */
+    static public function set_option(){
+        if ( ! static::$options ) {
+            static::$options = get_option('bce_basics');
+        }
+    }
+
+    /**
+     * 設定をセットする
+     */
+    static public function get_option(){
+        if ( static::$options ) {
+            return static::$options;
+        } else {
+            return get_option( "bce_basics" );
+        }
+    }
+
     /**
      * 有効な投稿タイプを返す
      *
@@ -19,7 +41,9 @@ class BCE_Utilis
      */
     static public function get_enabled_post_type()
     {
-        return apply_filters('bce_post_types', array('post', 'page'));
+        $post_type = static::get_post_type();
+
+        return apply_filters('bce_post_types', $post_type );
     }
 
     /**
@@ -44,6 +68,13 @@ class BCE_Utilis
         }
 
         return false;
+    }
+
+    /**
+     * 投稿タイプをチェック
+     */
+    static public function get_post_type(){
+        return static::$options['bce_post_type'];
     }
 
     /**

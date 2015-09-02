@@ -68,18 +68,24 @@ class BCE_Admin
                     'default' => array('post', 'page', 'attachment'),
                 ),
                 array(
-                    'name' => 'bce_background_color',
-                    'label' => __('Background Color', 'bce'),
-                    'desc' => __('Please select the background color.', 'bce'),
-                    'type' => 'color',
-                    'default' => '#41605b'
-                ),
-                array(
                     'name' => 'bce_user_select',
                     'label' => __('Choose a user', 'bce'),
                     'desc' => __('Please select the user to enable.', 'bce'),
                     'type' => 'user_select',
-                    'default' => array(get_current_user_id())
+                    'default' => 1
+                ),
+                array(
+                    'name' => 'bce_grid_system_framework',
+                    'label' => __('Choose a Framework', 'bce'),
+                    'desc' => __('Please select the grid system (css)', 'bce'),
+                    'type' => 'radio',
+                    'default' => "none",
+                    'options' => array(
+                        "none" => "None",
+                        "foundation" => "Foundation",
+                        "bootstrap3" => "Bootstrap3",
+                    )
+
                 ),
             ),
         );

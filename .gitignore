@@ -8,14 +8,11 @@ sitemap.xml
 sitemap.xml.gz
 
 node_modules/
-assets/components/bce-trevor-js/*
-!assets/components/bce-trevor-js/build/
-!assets/components/bce-trevor-js/locales/
-!assets/components/Eventable/
-!assets/components/sir-trevor-js/sir-trevor-icons.css
-!assets/components/sir-trevor-js/public/
-
-assets/components/sir-trevor-columns-block/
+assets/components/bce-trevor-js/node_modules/
+assets/components/jquery/
+assets/components/i18n-js/
+assets/components/es5-shim/
+assets/components/es6-shim/
 assets/components/jquery/
 
 

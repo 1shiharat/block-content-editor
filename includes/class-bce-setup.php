@@ -1,5 +1,4 @@
 <?php
-
 /**
  * プラグインのセットアップ
  *
@@ -41,6 +40,7 @@ class BCE_Setup
     public function __construct($blocks)
     {
 
+        BCE_Utilis::set_option();
         $this->plugin_name = BCE_Utilis::get_plugin_name();
         $this->version = BCE_Utilis::get_version();
         $this->blocks = $blocks;
@@ -73,6 +73,20 @@ class BCE_Setup
      */
     public function enqueue_scripts($hook)
     {
+        $options = BCE_Utilis::get_option();
+        if (isset($options["bce_grid_system_framework"]) && "none" !== $options["bce_grid_system_framework"]) {
+            switch ($options["bce_grid_system_framework"]) {
+                case "foundation" :
+                    wp_enqueue_style($this->plugin_name . 'grid-system', plugin_dir_url(__FILE__) . '../assets/css/foundation-grid.css', array(), $this->version, false);
+                    break;
+                case "bootstrap3" :
+                    wp_enqueue_style($this->plugin_name . 'grid-system', plugin_dir_url(__FILE__) . '../assets/css/bootstrap-grid.css', array(), $this->version, false);
+                    break;
+                default :
+                    break;
+            }
+        }
+
         if (!BCE_Utilis::is_enabled_editor()) {
             return false;
         }
