@@ -75,7 +75,7 @@ class BCE_List extends BCE_Block {
         ';
     }
 
-    public function generate_html($data){
+    public function generate_html($data, $block_instance = null){
         $html = '<div class="bce-block bce-block__list"><ul>';
         foreach ( $data->listItems as $list ){
             $html .= '<li>' . $list->content . '</li>';

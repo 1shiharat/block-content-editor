@@ -73,7 +73,7 @@ class BCE_Video extends BCE_Block
         $this->param = array('source', 'remote_id');
     }
 
-    public function generate_html($data)
+    public function generate_html($data,$block_instance = null)
     {
         $html = '<div class="bce-block bce-block__video">';
         if ( $data->source == 'youtube' ) {

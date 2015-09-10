@@ -96,9 +96,10 @@ class BCE_Block
      * BCE_Parser クラスにて記述
      *
      * @param $data
+     * @param null $block_instance
      * @return mixed
      */
-    public function generate_html($data)
+    public function generate_html($data, $block_instance = null)
     {
         if ($this->template) {
             return BCE_Parser::template($this->template, $data);

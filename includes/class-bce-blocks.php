@@ -199,7 +199,7 @@ class BCE_Blocks
      *
      * @return void
      */
-    public function bce_autoloader( $class_name )
+    public function bce_autoloader($class_name)
     {
         if (strpos('BCE_', $class_name) >= 0) {
             $class_name = str_replace('BCE_', '', $class_name);
@@ -229,7 +229,7 @@ class BCE_Blocks
         }
         $block_content = isset($_REQUEST['block_content']) ? $_REQUEST['block_content'] : '';
 
-        if (!$block_content) {
+        if (!$block_content || strlen($block_content) < 16) {
             return false;
         }
         update_post_meta($post_id, 'block_content', $block_content);

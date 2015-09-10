@@ -84,7 +84,7 @@ class BCE_Columns extends BCE_Block
         );
     }
 
-    public function generate_html($data, $block_instance)
+    public function generate_html($data, $block_instance = null)
     {
         $html = '<div class="bce-block bce-block__columns ' . $this->get_row_markup() . '">';
         foreach ($data->columns as $key => $column) {

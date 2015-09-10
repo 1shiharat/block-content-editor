@@ -68,9 +68,10 @@ class BCE_Wpimage extends BCE_Block
 
     public function init()
     {
-        add_action('init',function(){
+
+        if ( ! is_admin() && BCE_Utilis::is_enabled_editor() ) {
             wp_enqueue_media();
-        });
+        }
         $this->type = 'wpimage';
         $this->class = 'wpimage';
         $this->param = array('url','alt');
@@ -80,35 +81,8 @@ class BCE_Wpimage extends BCE_Block
             <img src="%url%" alt="%alt%"/>
         </div>
         ';
-
-        add_action('wp_ajax_stwp_nonce', array($this, 'wp_ajax_stwp_nonce'));
-        add_action('wp_ajax_stwp_imgurl', array($this, 'wp_ajax_stwp_imgurl'));
     }
 
-    /**
-     * 画像登録用のnonceフィールドを返す
-     */
-    public function wp_ajax_stwp_nonce()
-    {
-        if (strpos($_SERVER['HTTP_REFERER'], get_site_url()) == 0 && current_user_can('edit_posts'))
-            echo wp_create_nonce('media-form');
-        die();
-    }
-
-
-    /**
-     * アップロード完了した画像のURLを返す
-     */
-    public function wp_ajax_stwp_imgurl()
-    {
-        if (strpos($_SERVER['HTTP_REFERER'], get_site_url()) == 0 && current_user_can('edit_posts')) {
-            $image_id = isset($_GET['id']) ? intval($_REQUEST['id']) : 0;
-            $imagefull = wp_get_attachment_image_src($image_id, 'full');
-            $imagedisp = wp_get_attachment_image_src($image_id, 'large');
-            echo json_encode(array('full' => $imagefull[0], 'disp' => $imagedisp[0]));
-        }
-        die();
-    }
 }
 
 ?>

@@ -1,0 +1,206 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: BCE\n"
+"POT-Creation-Date: 2015-09-05 23:35+0900\n"
+"PO-Revision-Date: 2015-09-05 23:34+0900\n"
+"Last-Translator: ishihara <ishihara@grow-group.jp>\n"
+"Language-Team: ishihara <ishihara@grow-group.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: block-content-editor.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#. Plugin Name of the plugin/theme
+#: includes/class-bce-admin.php:37
+msgid "BCE"
+msgstr ""
+
+#: includes/class-bce-admin.php:48
+msgid "Basic Settings"
+msgstr ""
+
+#: includes/class-bce-admin.php:65
+msgid "Post Type"
+msgstr ""
+
+#: includes/class-bce-admin.php:66
+msgid "Please select the post type to enable the editor"
+msgstr ""
+
+#: includes/class-bce-admin.php:72
+msgid "Choose a user"
+msgstr ""
+
+#: includes/class-bce-admin.php:73
+msgid "Please select the user to enable."
+msgstr ""
+
+#: includes/class-bce-admin.php:79
+msgid "Choose a Framework"
+msgstr ""
+
+#: includes/class-bce-admin.php:80
+msgid "Please select the grid system (css)"
+msgstr ""
+
+#: includes/class-bce-admin.php:97
+msgid "BCE Settings"
+msgstr ""
+
+#: includes/class-bce-frontend.php:43
+msgid "Save"
+msgstr ""
+
+#: includes/class-bce-settings-api.php:380
+msgid "Choose File"
+msgstr ""
+
+#: includes/class-bce-setup.php:175
+msgid "削除しますか?"
+msgstr ""
+
+#: includes/class-bce-setup.php:176
+msgid "ここに__block__をドラッグ"
+msgstr ""
+
+#: includes/class-bce-setup.php:177
+msgid "またはここにリンクをコピー"
+msgstr ""
+
+#: includes/class-bce-setup.php:178
+msgid "...またはファイルを選択します"
+msgstr ""
+
+#: includes/class-bce-setup.php:179
+msgid "閉じる"
+msgstr ""
+
+#: includes/class-bce-setup.php:180
+msgid "ポジション"
+msgstr ""
+
+#: includes/class-bce-setup.php:181
+msgid "お待ちください..."
+msgstr ""
+
+#: includes/class-bce-setup.php:182
+msgid "リンクを紹介"
+msgstr ""
+
+#: includes/class-bce-setup.php:186
+msgid "次のエラーが発生しました。"
+msgstr ""
+
+#: includes/class-bce-setup.php:187
+msgid "__type__ブロックが無効です"
+msgstr ""
+
+#: includes/class-bce-setup.php:188
+msgid "__name__は必ず値が必要です。"
+msgstr ""
+
+#: includes/class-bce-setup.php:189
+msgid "あなたが__type__タイプのブロックを持っている必要があります"
+msgstr ""
+
+#: includes/class-bce-setup.php:190
+msgid "__type__は必ず値の入力が必要ですが、空になっています。"
+msgstr ""
+
+#: includes/class-bce-setup.php:191
+msgid "コンテンツの内容を読み込み中に問題が発生しました"
+msgstr ""
+
+#: includes/class-bce-setup.php:196
+msgid "ブロック"
+msgstr ""
+
+#: includes/class-bce-setup.php:199
+msgid "テキスト"
+msgstr ""
+
+#: includes/class-bce-setup.php:202
+msgid "リスト"
+msgstr ""
+
+#: includes/class-bce-setup.php:205
+msgid "引用"
+msgstr ""
+
+#: includes/class-bce-setup.php:206
+msgid "著者"
+msgstr ""
+
+#: includes/class-bce-setup.php:209
+msgid "画像"
+msgstr ""
+
+#: includes/class-bce-setup.php:210
+msgid "画像のアップロードに失敗しました"
+msgstr ""
+
+#: includes/class-bce-setup.php:213
+msgid "動画"
+msgstr ""
+
+#: includes/class-bce-setup.php:216
+msgid "ツイート"
+msgstr ""
+
+#: includes/class-bce-setup.php:217
+msgid "ツイートを読み込むことが出来ませんでした。"
+msgstr ""
+
+#: includes/class-bce-setup.php:220
+msgid "埋め込み"
+msgstr ""
+
+#: includes/class-bce-setup.php:221
+msgid "あなたのビデオを取得中に問題が発生しました"
+msgstr ""
+
+#: includes/class-bce-setup.php:222
+msgid "あなたは、関連するAPIキーを持っている必要があります"
+msgstr ""
+
+#: includes/class-bce-setup.php:225
+msgid "見出し"
+msgstr ""
+
+#: includes/class-bce-setup.php:228
+msgid "エディタ"
+msgstr ""
+
+#: includes/class-bce-setup.php:231
+msgid "カラム"
+msgstr ""
+
+#: includes/class-bce-setup.php:234
+msgid "線"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://github.com/1shiharat/block-content-editor"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "block based visual editor."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "1shiharat"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://grow-group.jp"
+msgstr ""
