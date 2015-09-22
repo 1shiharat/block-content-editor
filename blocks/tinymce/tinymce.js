@@ -21,8 +21,8 @@
         settings.plugins = "paste,wordpress,media,fullscreen,wpeditimage,wpgallery,wpview,wplink,hr,tabfocus,textcolor,wpautoresize,codemirror,wpemoji";
         settings.theme_advanced_toolbar_location = "top";
         settings.theme_advanced_styles = "Header 1=h1;Header 2=header2;Header 3=header3;",
-            settings.theme_advanced_buttons1 = "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv,separator,separator,code",
-            settings.theme_advanced_buttons2 = "formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,|,outdent,indent,|,undo,redo,wp_help";
+        settings.theme_advanced_buttons1 = "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv,separator,separator,code",
+        settings.theme_advanced_buttons2 = "formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,|,outdent,indent,|,undo,redo,wp_help";
         settings.menubar = true;
         settings.wpautop = true;
         settings.language = "ja";
@@ -48,9 +48,9 @@
             editor.on('change', function () {
                 tinymce.triggerSave();
             });
-        }
+        };
 
-        settings.wp_autoresize_on = false;
+        //settings.wp_autoresize_on = false;
 
         tinyMCE.init(settings);
     }
@@ -103,15 +103,26 @@
 
             // String or Function; The HTML for the inner portion of the editor block
             // In this example, the editorHTML is an editable input div (like we use for a TextBlock)
-
+            //
             scribeOptions: {
-                allowBlockElements: true,
+                allowBlockElements: false,
                 tags: {
-                    p: true,
-                    img: true,
-                    a: true,
+                    p: {
+                        style: true,
+                        class: true
+                    },
+                    img: {
+                        style: true,
+                        class: true
+                    },
+                    a: {
+                        href: true
+                    },
                     i: true,
-                    span: true,
+                    span: {
+                        style: true,
+                        class: true
+                    },
                     iframe: true,
                     h1: true,
                     h2: true,
@@ -119,7 +130,9 @@
                     h4: true,
                     h5: true,
                     h6: true,
-                    div: true,
+                    div: {
+                        style: true
+                    },
                     section: true,
                     aside: true,
                     hr: true,
@@ -128,24 +141,34 @@
                     font: true,
                     article: true,
                     nav: true,
-                    ul: true,
-                    li: true,
+                    ul: {
+                        style: true
+                    },
+                    li: {
+                        style: true
+                    },
                     ol: true,
                     dl: true,
                     dt: true,
                     dd: true,
-                    table: true,
+                    table: {
+                        style: true
+                    },
                     figure: true,
                     caption: true,
-                    table: true,
                     tbody: true,
                     thead: true,
                     tr: true,
-                    td: true,
-                    th: true,
+                    td:{
+                        style: true
+                    },
+                    th: {
+                        style: true
+                    },
                     colspan: true,
                     colgroup: true,
                     tfoot: true,
+                    br: true,
                 }
             },
             // Classes:
@@ -153,8 +176,13 @@
             // st-text-block – gives the block the ability to use the formatting controls
 
             editorHTML: function () {
-                var template = _.template("<div class='st-text-block st-tinymce-block st-tinymce-block_<%= blockID%>' contenteditable='false'></div>");
-                return template({blockID: this.blockID});
+                var template = _.template("<textarea name='text' class='st-tinymce-block st-tinymce-block_<%= blockID%>'><%= data.getTextValue() %></textarea>");
+                return template({blockID: this.blockID,data: this});
+            },
+            getTextValue: function(){
+                if ( typeof this.blockStorage.data.text !== "undefined" ){
+                    return this.blockStorage.data.text;
+                }
             },
 
             // Function; Executed on render of the block if some data is provided.
